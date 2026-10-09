@@ -1,0 +1,1600 @@
+{
+  "rules": [
+    {
+      "id": "R1",
+      "text": "A single expense of up to 300 AZN may be approved by the employee's line supervisor.",
+      "type": "approval"
+    },
+    {
+      "id": "R2",
+      "text": "A single expense above 300 AZN and up to 2,000 AZN requires the written approval of the department manager.",
+      "type": "approval"
+    },
+    {
+      "id": "R3",
+      "text": "A single expense above 2,000 AZN requires the written approval of the Finance Director.",
+      "type": "approval"
+    },
+    {
+      "id": "R4",
+      "text": "Alcohol is not reimbursable under any circumstances.",
+      "type": "condition"
+    },
+    {
+      "id": "R5",
+      "text": "An original receipt or invoice must be attached to every expense claim above 50 AZN.",
+      "type": "condition"
+    },
+    {
+      "id": "R6",
+      "text": "Expense claims must be submitted within 30 days.",
+      "type": "deadline"
+    },
+    {
+      "id": "R7",
+      "text": "Late claims may be accepted with the consent of the department manager.",
+      "type": "condition"
+    },
+    {
+      "id": "R8",
+      "text": "The same expense may not be claimed more than once.",
+      "type": "condition"
+    },
+    {
+      "id": "R9",
+      "text": "Domestic business travel is permitted when it is necessary.",
+      "type": "condition"
+    },
+    {
+      "id": "R10",
+      "text": "The department manager decides whether a trip is necessary.",
+      "type": "condition"
+    },
+    {
+      "id": "R11",
+      "text": "Hotel accommodation is reimbursed up to 150 AZN per night.",
+      "type": "limit"
+    },
+    {
+      "id": "R12",
+      "text": "A per diem of 60 AZN is paid for each day of travel to cover meals and incidental costs.",
+      "type": "limit"
+    },
+    {
+      "id": "R13",
+      "text": "No receipts are required for the per diem.",
+      "type": "condition"
+    },
+    {
+      "id": "R14",
+      "text": "Air travel must be booked in economy class.",
+      "type": "condition"
+    },
+    {
+      "id": "R15",
+      "text": "An employee may request a cash advance of up to 1,000 AZN for a business trip.",
+      "type": "limit"
+    },
+    {
+      "id": "R16",
+      "text": "The advance must be settled after the trip by submitting receipts or returning the unspent cash.",
+      "type": "condition"
+    },
+    {
+      "id": "R17",
+      "text": "Client entertainment is reimbursed up to 100 AZN per person, with the approval of the department manager.",
+      "type": "limit"
+    },
+    {
+      "id": "R18",
+      "text": "The employee must record the names of the clients entertained.",
+      "type": "condition"
+    },
+    {
+      "id": "R19",
+      "text": "The Finance Department owns this policy and may update it at any time.",
+      "type": "condition"
+    }
+  ],
+  "findings": [
+    {
+      "rule_id": "R11",
+      "attacker": "technicalist",
+      "policy_basis": "Hotel accommodation is reimbursed up to 150 AZN per night.",
+      "scenario": "The employee books a 30‑night hotel stay and claims the full 150 AZN for each night, exploiting the lack of a total‑trip cap.",
+      "severity": "high",
+      "verified": true,
+      "fix": "Hotel accommodation reimbursement is limited to 150 AZN per night and a maximum of 30 nights per business trip.",
+      "estimated_loss_azn": 4500,
+      "verdict": "valid",
+      "reason": "The rule caps reimbursement per night but does not limit total nights, allowing unlimited claim amounts.",
+      "duplicates": 0,
+      "attackers": [
+        "technicalist"
+      ]
+    },
+    {
+      "rule_id": "R11",
+      "attacker": "technicalist",
+      "policy_basis": "Hotel accommodation is reimbursed up to 150 AZN per night.",
+      "scenario": "The employee claims hotel reimbursement for nights when they stayed with a colleague who offered a free room, because the rule does not require the accommodation to be actually paid for.",
+      "severity": "high",
+      "verified": true,
+      "fix": "Hotel accommodation reimbursement is payable only for nights for which a valid receipt or invoice showing payment is provided.",
+      "estimated_loss_azn": 4500,
+      "verdict": "valid",
+      "reason": "The rule does not require the accommodation to have been actually paid for, so free rooms can be claimed.",
+      "duplicates": 0,
+      "attackers": [
+        "technicalist"
+      ]
+    },
+    {
+      "rule_id": "R3",
+      "attacker": "fraudster",
+      "policy_basis": "A single expense above 2,000 AZN requires the written approval of the Finance Director.",
+      "scenario": "The employee files two separate claims of 2,100 AZN and 2,050 AZN; each is individually approved by the Finance Director, allowing reimbursement of more than the intended single‑expense limit.",
+      "severity": "high",
+      "verified": true,
+      "fix": "Add: \"An employee may not submit more than one expense claim exceeding 2,000 AZN for the same trip or project.\"",
+      "estimated_loss_azn": 4150,
+      "verdict": "valid",
+      "reason": "The rule caps a single expense above 2,000 AZN but does not limit the number of separate claims, enabling multiple large reimbursements.",
+      "duplicates": 0,
+      "attackers": [
+        "fraudster"
+      ]
+    },
+    {
+      "rule_id": "R15",
+      "attacker": "fraudster",
+      "policy_basis": "An employee may request a cash advance of up to 1,000 AZN for a business trip.",
+      "scenario": "The employee submits three separate advance requests for 1,000 AZN each for three consecutive trips, because the rule limits only the amount per request, not the total amount an employee may receive.",
+      "severity": "high",
+      "verified": true,
+      "fix": "An employee may receive a cash advance of up to 1,000 AZN per calendar month, with total advances not exceeding 1,000 AZN without additional Finance Director approval.",
+      "estimated_loss_azn": 3000,
+      "verdict": "valid",
+      "reason": "The cash‑advance rule limits only the amount per request, not the cumulative amount an employee may obtain.",
+      "duplicates": 0,
+      "attackers": [
+        "fraudster"
+      ]
+    },
+    {
+      "rule_id": "R3",
+      "attacker": "fraudster",
+      "policy_basis": "A single expense above 2,000 AZN requires the written approval of the Finance Director.",
+      "scenario": "The Finance Director, who also travelled for business, signs the approval for their own 2,500 AZN expense, since the policy never forbids the claimant from being the approver.",
+      "severity": "high",
+      "verified": true,
+      "fix": "Add: \"The Finance Director may not approve expense claims submitted by themselves.\"",
+      "estimated_loss_azn": 2500,
+      "verdict": "valid",
+      "reason": "The Finance Director can approve their own 2,500 AZN expense because the policy does not require a different approver.",
+      "duplicates": 0,
+      "attackers": [
+        "fraudster"
+      ]
+    },
+    {
+      "rule_id": "R2",
+      "attacker": "technicalist",
+      "policy_basis": "A single expense above 300 AZN and up to 2,000 AZN requires the written approval of the department manager.",
+      "scenario": "The employee splits a 2,500 AZN purchase into two separate expenses of 1,250 AZN each; each is a “single expense” within the 300‑2,000 AZN band and only needs the department manager’s written approval, bypassing the Finance Director.",
+      "severity": "high",
+      "verified": true,
+      "fix": "Require that related expenses whose combined total exceeds 2,000 AZN receive Finance Director approval.",
+      "estimated_loss_azn": 2500,
+      "verdict": "valid",
+      "reason": "Splitting a >2,000 AZN purchase into two expenses each under 2,000 AZN avoids the Finance Director’s approval requirement.",
+      "duplicates": 0,
+      "attackers": [
+        "technicalist"
+      ]
+    },
+    {
+      "rule_id": "R3",
+      "attacker": "lazy",
+      "policy_basis": "A single expense above 2,000 AZN requires the written approval of the Finance Director.",
+      "scenario": "The employee submits three separate expenses of 2,100 AZN each, each only needing the Finance Director’s signature, as the rule caps only per‑expense amounts.",
+      "severity": "high",
+      "verified": true,
+      "fix": "Add a clause: “The total amount of expenses requiring Finance Director approval may not exceed 2,000 AZN per month.”",
+      "estimated_loss_azn": 2100,
+      "verdict": "valid",
+      "reason": "The rule caps only per‑expense amounts, allowing unlimited separate expenses above 2,000 AZN.",
+      "duplicates": 0,
+      "attackers": [
+        "lazy"
+      ]
+    },
+    {
+      "rule_id": "R3",
+      "attacker": "lazy",
+      "policy_basis": "A single expense above 2,000 AZN requires the written approval of the Finance Director.",
+      "scenario": "The Finance Director is also the employee’s line supervisor and signs the approval, because the policy never states that the Finance Director must be independent of the claimant.",
+      "severity": "high",
+      "verified": true,
+      "fix": "Add a clause: “The Finance Director approving an expense must not be the employee’s line supervisor or direct manager.”",
+      "estimated_loss_azn": 2100,
+      "verdict": "valid",
+      "reason": "The policy does not require the Finance Director to be independent of the claimant, permitting self‑approval.",
+      "duplicates": 0,
+      "attackers": [
+        "lazy"
+      ]
+    },
+    {
+      "rule_id": "R2",
+      "attacker": "lazy",
+      "policy_basis": "A single expense above 300 AZN and up to 2,000 AZN requires the written approval of the department manager.",
+      "scenario": "The employee is also the department manager and provides the written approval, because the policy does not forbid the claimant from being the approver.",
+      "severity": "high",
+      "verified": true,
+      "fix": "Add a clause: “The approving department manager must be a different employee than the claimant.”",
+      "estimated_loss_azn": 2000,
+      "verdict": "valid",
+      "reason": "The policy does not forbid the claimant from also being the approving department manager.",
+      "duplicates": 0,
+      "attackers": [
+        "lazy"
+      ]
+    },
+    {
+      "rule_id": "R2",
+      "attacker": "fraudster",
+      "policy_basis": "A single expense above 300 AZN and up to 2,000 AZN requires the written approval of the department manager.",
+      "scenario": "The employee splits a 1,900 AZN purchase into two items of 950 AZN each; each item falls below the 2,000 AZN ceiling and is approved separately by the department manager, resulting in reimbursement of the full amount.",
+      "severity": "high",
+      "verified": true,
+      "fix": "Add: \"Expenses that are part of a single purchase may not be split to avoid the approval threshold.\"",
+      "estimated_loss_azn": 1900,
+      "verdict": "valid",
+      "reason": "Splitting a 1,900 AZN purchase into two sub‑expenses each below the 2,000 AZN threshold bypasses the intended single‑expense approval limit.",
+      "duplicates": 0,
+      "attackers": [
+        "fraudster"
+      ]
+    },
+    {
+      "rule_id": "R2",
+      "attacker": "lazy",
+      "policy_basis": "A single expense above 300 AZN and up to 2,000 AZN requires the written approval of the department manager.",
+      "scenario": "The employee files two expenses of 1,900 AZN each, each needing only the department manager’s written sign, since the rule applies per expense and imposes no aggregate limit.",
+      "severity": "high",
+      "verified": true,
+      "fix": "Add a clause: “The combined total of expenses requiring department‑manager approval may not exceed 2,000 AZN per claim period.”",
+      "estimated_loss_azn": 1900,
+      "verdict": "valid",
+      "reason": "The approval requirement is per expense and imposes no aggregate cap, so multiple near‑limit expenses can be claimed.",
+      "duplicates": 0,
+      "attackers": [
+        "lazy"
+      ]
+    },
+    {
+      "rule_id": "R2",
+      "attacker": "technicalist",
+      "policy_basis": "A single expense above 300 AZN and up to 2,000 AZN requires the written approval of the department manager.",
+      "scenario": "Because the policy does not require the approver to be a different person, an employee who also holds the department‑manager role can give themselves the written approval for a 1,800 AZN expense.",
+      "severity": "high",
+      "verified": true,
+      "fix": "State that the department manager providing written approval must be a different individual from the claimant.",
+      "estimated_loss_azn": 1800,
+      "verdict": "valid",
+      "reason": "The policy does not require the department manager approving an expense to be a different person, permitting self‑approval.",
+      "duplicates": 0,
+      "attackers": [
+        "technicalist"
+      ]
+    },
+    {
+      "rule_id": "R2",
+      "attacker": "fraudster",
+      "policy_basis": "A single expense above 300 AZN and up to 2,000 AZN requires the written approval of the department manager.",
+      "scenario": "The department manager, who also incurred the expense, writes their own approval for a 1,500 AZN claim, because the policy does not state that the approver must be different from the claimant.",
+      "severity": "high",
+      "verified": true,
+      "fix": "Add: \"The approving manager must not be the employee submitting the expense claim.\"",
+      "estimated_loss_azn": 1500,
+      "verdict": "valid",
+      "reason": "The policy does not forbid the department manager from approving their own claim, allowing self‑approval of a 1,500 AZN expense.",
+      "duplicates": 0,
+      "attackers": [
+        "fraudster"
+      ]
+    },
+    {
+      "rule_id": "R11",
+      "attacker": "lazy",
+      "policy_basis": "Hotel accommodation is reimbursed up to 150 AZN per night.",
+      "scenario": "The employee books a hotel for 10 consecutive nights and claims the full 150 AZN each night, because the rule caps only the amount per night and does not limit the number of nights.",
+      "severity": "high",
+      "verified": true,
+      "fix": "Add a clause that hotel reimbursement is limited to a maximum of X nights per business trip unless justified in writing.",
+      "estimated_loss_azn": 1500,
+      "verdict": "valid",
+      "reason": "The rule caps reimbursement per night but does not limit the number of nights, allowing unlimited claims.",
+      "duplicates": 0,
+      "attackers": [
+        "lazy"
+      ]
+    },
+    {
+      "rule_id": "R15",
+      "attacker": "fraudster",
+      "policy_basis": "An employee may request a cash advance of up to 1,000 AZN for a business trip.",
+      "scenario": "The employee requests a 1,000 AZN advance for a short trip, then later requests an additional advance for the same trip, exploiting the absence of a rule that forbids multiple advances for one trip.",
+      "severity": "high",
+      "verified": true,
+      "fix": "Add a rule stating that only one cash advance may be requested per business trip.",
+      "estimated_loss_azn": 1000,
+      "verdict": "valid",
+      "reason": "The policy permits a cash advance up to 1,000 AZN but does not limit the number of advances per trip, allowing multiple advances for the same trip.",
+      "duplicates": 0,
+      "attackers": [
+        "fraudster"
+      ]
+    },
+    {
+      "rule_id": "R17",
+      "attacker": "fraudster",
+      "policy_basis": "Client entertainment is reimbursed up to 100 AZN per person, with the approval of the department manager.",
+      "scenario": "The employee records entertainment for ten different “clients” (using generic names) in a single claim, each at the 100 AZN limit, exploiting the lack of a total cap on the number of persons.",
+      "severity": "high",
+      "verified": true,
+      "fix": "Introduce a total maximum amount or limit on the number of client‑entertainment reimbursements per claim/trip.",
+      "estimated_loss_azn": 1000,
+      "verdict": "valid",
+      "reason": "There is no overall cap on the number of clients reimbursed, so an employee can claim the maximum 100 AZN for each of many clients.",
+      "duplicates": 0,
+      "attackers": [
+        "fraudster"
+      ]
+    },
+    {
+      "rule_id": "R15",
+      "attacker": "technicalist",
+      "policy_basis": "An employee may request a cash advance of up to 1,000 AZN for a business trip.",
+      "scenario": "The employee submits two separate advance requests for the same trip, each for 1,000 AZN, because the rule does not limit the number of advances per trip.",
+      "severity": "high",
+      "verified": true,
+      "fix": "Limit the total cash advance for a single business trip to 1,000 AZN, regardless of the number of requests.",
+      "estimated_loss_azn": 1000,
+      "verdict": "valid",
+      "reason": "The rule sets a per‑request limit but does not cap the total advance amount per trip.",
+      "duplicates": 0,
+      "attackers": [
+        "technicalist"
+      ]
+    },
+    {
+      "rule_id": "R15",
+      "attacker": "technicalist",
+      "policy_basis": "An employee may request a cash advance of up to 1,000 AZN for a business trip.",
+      "scenario": "The employee requests a 1,000 AZN advance for a short‑duration trip and later requests another advance for the same trip after a weekend, exploiting the lack of a cumulative ceiling.",
+      "severity": "high",
+      "verified": true,
+      "fix": "Restrict the cumulative cash‑advance amount for any one business trip to a maximum of 1,000 AZN.",
+      "estimated_loss_azn": 1000,
+      "verdict": "valid",
+      "reason": "Absence of a cumulative ceiling allows multiple 1,000 AZN advances for the same trip.",
+      "duplicates": 0,
+      "attackers": [
+        "technicalist"
+      ]
+    },
+    {
+      "rule_id": "R1",
+      "attacker": "fraudster",
+      "policy_basis": "A single expense of up to 300 AZN may be approved by the employee's line supervisor.",
+      "scenario": "The employee submits three separate expense items of 300 AZN each for the same business purpose; each item is approved by the line supervisor, allowing a total reimbursement of 900 AZN despite the rule applying only to a single expense.",
+      "severity": "high",
+      "verified": true,
+      "fix": "Add: \"An employee may not submit more than one expense item for the same business purpose within a single reimbursement period.\"",
+      "estimated_loss_azn": 900,
+      "verdict": "valid",
+      "reason": "The rule limits a single expense but does not limit the number of separate expenses for the same purpose, allowing multiple 300 AZN items to be approved.",
+      "duplicates": 0,
+      "attackers": [
+        "fraudster"
+      ]
+    },
+    {
+      "rule_id": "R12",
+      "attacker": "fraudster",
+      "policy_basis": "A per diem of 60 AZN is paid for each day of travel to cover meals and incidental costs.",
+      "scenario": "The employee reports a travel period of fifteen days, even though the trip only lasted three days, and receives 60 AZN for every reported day because the rule does not restrict how many days may be claimed.",
+      "severity": "high",
+      "verified": true,
+      "fix": "Per‑diem may be claimed only for actual travel days, verified by a travel itinerary or approved travel order.",
+      "estimated_loss_azn": 900,
+      "verdict": "valid",
+      "reason": "The per‑diem rule sets a daily amount but imposes no limit on the number of days that can be claimed.",
+      "duplicates": 0,
+      "attackers": [
+        "fraudster"
+      ]
+    },
+    {
+      "rule_id": "R1",
+      "attacker": "technicalist",
+      "policy_basis": "A single expense of up to 300 AZN may be approved by the employee's line supervisor.",
+      "scenario": "The employee submits three separate expense items of 300 AZN each for the same purchase; each item is a “single expense” under 300 AZN and is approved by the line supervisor, thereby reimbursing 900 AZN without needing higher approval.",
+      "severity": "high",
+      "verified": true,
+      "fix": "Add a clause that the total amount for a single purchase may not exceed 300 AZN without higher‑level approval.",
+      "estimated_loss_azn": 900,
+      "verdict": "valid",
+      "reason": "The policy limits approval per single expense but does not limit the total amount for a single purchase, enabling split‑billing.",
+      "duplicates": 0,
+      "attackers": [
+        "technicalist"
+      ]
+    },
+    {
+      "rule_id": "R12",
+      "attacker": "fraudster",
+      "policy_basis": "A per diem of 60 AZN is paid for each day of travel to cover meals and incidental costs.",
+      "scenario": "The employee submits two separate travel requests for the same calendar week, each with a per‑diem claim, effectively doubling the 60 AZN per day because the policy does not forbid overlapping claims.",
+      "severity": "high",
+      "verified": true,
+      "fix": "Overlapping travel requests for the same period shall be rejected and per‑diem may be claimed only once per calendar day.",
+      "estimated_loss_azn": 840,
+      "verdict": "valid",
+      "reason": "The policy does not forbid submitting overlapping travel requests, enabling double‑paying the per‑diem for the same days.",
+      "duplicates": 0,
+      "attackers": [
+        "fraudster"
+      ]
+    },
+    {
+      "rule_id": "R8",
+      "attacker": "lazy",
+      "policy_basis": "The same expense may not be claimed more than once.",
+      "scenario": "The employee divides a hotel stay of 3 nights (total 450 AZN) into three separate nightly claims, each treated as a distinct expense, thereby bypassing the single‑expense prohibition.",
+      "severity": "high",
+      "verified": true,
+      "fix": "Define a “single expense” as any cost for the same service incurred on the same trip and prohibit splitting it into multiple claims.",
+      "estimated_loss_azn": 450,
+      "verdict": "valid",
+      "reason": "The policy forbids claiming the same expense more than once but does not define a “single expense,” so splitting a hotel stay into separate nightly claims evades the restriction.",
+      "duplicates": 0,
+      "attackers": [
+        "lazy"
+      ]
+    },
+    {
+      "rule_id": "R1",
+      "attacker": "lazy",
+      "policy_basis": "A single expense of up to 300 AZN may be approved by the employee's line supervisor.",
+      "scenario": "The employee submits several separate expenses each of 300 AZN, because the rule limits only a single expense and does not cap the total number of such expenses.",
+      "severity": "high",
+      "verified": true,
+      "fix": "Add a clause: “The total amount of expenses approved by a line supervisor may not exceed 300 AZN per month.”",
+      "estimated_loss_azn": 300,
+      "verdict": "valid",
+      "reason": "The rule limits only a single expense amount, not the total number of expenses, allowing unlimited reimbursements of 300 AZN each.",
+      "duplicates": 0,
+      "attackers": [
+        "lazy"
+      ]
+    },
+    {
+      "rule_id": "R14",
+      "attacker": "fraudster",
+      "policy_basis": "Air travel must be booked in economy class.",
+      "scenario": "The employee purchases a first‑class ticket and claims reimbursement for the same amount, arguing that the policy only states a requirement, not a penalty for non‑compliance.",
+      "severity": "high",
+      "verified": true,
+      "fix": "Any air‑travel expense exceeding the economy‑class fare must be approved in writing by the Finance Director and will be reimbursed only up to the economy fare.",
+      "estimated_loss_azn": 0,
+      "verdict": "valid",
+      "reason": "The policy only states a requirement but provides no enforcement, so a first‑class ticket can be reimbursed without consequence.",
+      "duplicates": 0,
+      "attackers": [
+        "fraudster"
+      ]
+    },
+    {
+      "rule_id": "R10",
+      "attacker": "technicalist",
+      "policy_basis": "The department manager decides whether a trip is necessary.",
+      "scenario": "Because the policy does not forbid the department manager from being the claimant, an employee who also holds the department‑manager role can unilaterally decide that their own trip is necessary.",
+      "severity": "high",
+      "verified": true,
+      "fix": "The department manager may not be the claimant for a trip they approve; approval must come from a higher‑level manager.",
+      "estimated_loss_azn": 0,
+      "verdict": "valid",
+      "reason": "The policy does not forbid the department manager from being the claimant, so a manager can self‑approve their own trip.",
+      "duplicates": 0,
+      "attackers": [
+        "technicalist"
+      ]
+    },
+    {
+      "rule_id": "R3",
+      "attacker": "technicalist",
+      "policy_basis": "A single expense above 2,000 AZN requires the written approval of the Finance Director.",
+      "scenario": "The policy does not forbid the Finance Director from approving their own claim, so an employee who is also the Finance Director can sign the required written approval for a 2,500 AZN expense.",
+      "severity": "medium",
+      "verified": true,
+      "fix": "Require that the Finance Director’s written approval be provided by a person other than the claimant.",
+      "estimated_loss_azn": 2500,
+      "verdict": "valid",
+      "reason": "The policy does not forbid the Finance Director from approving their own claim, allowing self‑approval.",
+      "duplicates": 0,
+      "attackers": [
+        "technicalist"
+      ]
+    },
+    {
+      "rule_id": "R11",
+      "attacker": "fraudster",
+      "policy_basis": "Hotel accommodation is reimbursed up to 150 AZN per night.",
+      "scenario": "The employee books a hotel for ten nights and claims the full 150 AZN per night, because the rule limits only the amount per night and does not cap the total number of nights.",
+      "severity": "medium",
+      "verified": true,
+      "fix": "Hotel accommodation is reimbursed up to 150 AZN per night and up to a maximum of 1,500 AZN per business trip.",
+      "estimated_loss_azn": 1500,
+      "verdict": "valid",
+      "reason": "The rule caps reimbursement per night but does not limit the total number of nights, allowing unlimited total hotel expense.",
+      "duplicates": 0,
+      "attackers": [
+        "fraudster"
+      ]
+    },
+    {
+      "rule_id": "R11",
+      "attacker": "fraudster",
+      "policy_basis": "A single expense of up to 300 AZN may be approved by the employee's line supervisor.",
+      "scenario": "The employee is also the line supervisor and approves his own hotel claim (each night is a separate expense of 150 AZN, all under the 300 AZN approval limit).",
+      "severity": "medium",
+      "verified": true,
+      "fix": "Expenses may only be approved by a supervisor who is not the claimant.",
+      "estimated_loss_azn": 1500,
+      "verdict": "valid",
+      "reason": "The rule permits a supervisor to approve expenses up to 300 AZN and does not require the approver to be a different person.",
+      "duplicates": 0,
+      "attackers": [
+        "fraudster"
+      ]
+    },
+    {
+      "rule_id": "R15",
+      "attacker": "lazy",
+      "policy_basis": "An employee may request a cash advance of up to 1,000 AZN for a business trip.",
+      "scenario": "The employee requests a 1,000 AZN advance for a short trip, completes the trip, then requests a second 1,000 AZN advance for the same trip, because the rule sets a per‑request limit but does not limit the number of advances per trip.",
+      "severity": "medium",
+      "verified": true,
+      "fix": "Limit total cash advances for a single business trip to a maximum of 1,000 AZN unless additional justification is approved.",
+      "estimated_loss_azn": 1000,
+      "verdict": "valid",
+      "reason": "The rule limits the amount per advance request but does not limit the number of advances per trip.",
+      "duplicates": 0,
+      "attackers": [
+        "lazy"
+      ]
+    },
+    {
+      "rule_id": "R15",
+      "attacker": "lazy",
+      "policy_basis": "An employee may request a cash advance of up to 1,000 AZN for a business trip.",
+      "scenario": "The employee requests a 1,000 AZN advance even though no business trip has been approved yet, because the rule does not require prior travel authorization before the advance request.",
+      "severity": "medium",
+      "verified": true,
+      "fix": "Require that a travel request be approved before any cash advance may be issued.",
+      "estimated_loss_azn": 1000,
+      "verdict": "valid",
+      "reason": "The rule allows a cash advance without requiring prior travel authorization.",
+      "duplicates": 0,
+      "attackers": [
+        "lazy"
+      ]
+    },
+    {
+      "rule_id": "R16",
+      "attacker": "lazy",
+      "policy_basis": "The advance must be settled after the trip by submitting receipts or returning the unspent cash.",
+      "scenario": "The employee never returns the unspent cash nor submits receipts, and the policy provides no deadline or penalty for failing to settle the advance, allowing the amount to remain unaccounted.",
+      "severity": "medium",
+      "verified": true,
+      "fix": "Mandate that advances be settled within 30 days of trip completion, with penalties for non‑settlement.",
+      "estimated_loss_azn": 1000,
+      "verdict": "valid",
+      "reason": "The policy does not set a deadline or penalty for settling an advance, allowing it to remain unaccounted.",
+      "duplicates": 0,
+      "attackers": [
+        "lazy"
+      ]
+    },
+    {
+      "rule_id": "R13",
+      "attacker": "technicalist",
+      "policy_basis": "No receipts are required for the per diem.",
+      "scenario": "The employee submits per‑diem claims for ten separate travel days without any supporting documentation, relying on the explicit exemption from receipt requirements.",
+      "severity": "medium",
+      "verified": true,
+      "fix": "Per diem claims must be supported by a signed travel itinerary and a statement confirming that no other meal reimbursements were received.",
+      "estimated_loss_azn": 600,
+      "verdict": "valid",
+      "reason": "The rule explicitly states no receipts are required for per diem, allowing unlimited undocumented claims.",
+      "duplicates": 0,
+      "attackers": [
+        "technicalist"
+      ]
+    },
+    {
+      "rule_id": "R16",
+      "attacker": "technicalist",
+      "policy_basis": "The advance must be settled after the trip by submitting receipts or returning the unspent cash.",
+      "scenario": "The employee returns only a portion of the unspent cash and keeps the remainder, arguing that the rule allows settlement by “returning the unspent cash” without specifying that the full amount must be returned.",
+      "severity": "medium",
+      "verified": true,
+      "fix": "Specify that any unspent portion of a cash advance must be returned in full before reimbursement is processed.",
+      "estimated_loss_azn": 500,
+      "verdict": "valid",
+      "reason": "The wording allows returning “the unspent cash” without stating it must be the full amount, enabling partial retention.",
+      "duplicates": 0,
+      "attackers": [
+        "technicalist"
+      ]
+    },
+    {
+      "rule_id": "R7",
+      "attacker": "technicalist",
+      "policy_basis": "Late claims may be accepted with the consent of the department manager.",
+      "scenario": "Because there is no cap on the number of late claims, the employee repeatedly submits small late expenses (each under 50 AZN) with the same informal consent, accumulating a large total reimbursement.",
+      "severity": "medium",
+      "verified": true,
+      "fix": "Introduce a maximum total amount or number of late‑claim submissions per employee per fiscal year.",
+      "estimated_loss_azn": 490,
+      "verdict": "valid",
+      "reason": "No limit on the number or total amount of late claims lets an employee accumulate large reimbursements.",
+      "duplicates": 0,
+      "attackers": [
+        "technicalist"
+      ]
+    },
+    {
+      "rule_id": "R1",
+      "attacker": "fraudster",
+      "policy_basis": "A single expense of up to 300 AZN may be approved by the employee's line supervisor.",
+      "scenario": "The employee is also the line supervisor for their own position and signs the approval for a 300 AZN expense, satisfying the rule because the policy does not prohibit the claimant from being the approver.",
+      "severity": "medium",
+      "verified": true,
+      "fix": "Add: \"The approving supervisor must be a different employee than the claimant.\"",
+      "estimated_loss_azn": 300,
+      "verdict": "valid",
+      "reason": "The policy does not require the approver to be a different person, so a claimant can approve their own 300 AZN expense.",
+      "duplicates": 0,
+      "attackers": [
+        "fraudster"
+      ]
+    },
+    {
+      "rule_id": "R8",
+      "attacker": "fraudster",
+      "policy_basis": "The same expense may not be claimed more than once.",
+      "scenario": "The employee submits two claims for the same hotel stay but alters the description (e.g., “lodging – night 1” and “lodging – night 2”) and splits the total amount, circumventing the prohibition on claiming the identical expense.",
+      "severity": "medium",
+      "verified": true,
+      "fix": "The same expense may not be claimed more than once; expenses covering the same service period or invoice must be consolidated into a single claim.",
+      "estimated_loss_azn": 300,
+      "verdict": "valid",
+      "reason": "Without a definition of “same expense,” an employee can split a single hotel stay into multiple claims with different descriptions.",
+      "duplicates": 0,
+      "attackers": [
+        "fraudster"
+      ]
+    },
+    {
+      "rule_id": "R1",
+      "attacker": "lazy",
+      "policy_basis": "A single expense of up to 300 AZN may be approved by the employee's line supervisor.",
+      "scenario": "The employee is also the line supervisor and signs the approval, because the policy never states that the approver must be a different person.",
+      "severity": "medium",
+      "verified": true,
+      "fix": "Require that the line supervisor approving an expense be a different employee than the claimant.",
+      "estimated_loss_azn": 300,
+      "verdict": "valid",
+      "reason": "The rule allows a line supervisor to approve expenses up to 300 AZN but does not forbid the supervisor from approving their own claim.",
+      "duplicates": 0,
+      "attackers": [
+        "lazy"
+      ]
+    },
+    {
+      "rule_id": "R11",
+      "attacker": "lazy",
+      "policy_basis": "Hotel accommodation is reimbursed up to 150 AZN per night.",
+      "scenario": "The employee books two separate rooms for the same night, each costing 150 AZN, and submits two separate claims, since the rule does not restrict the number of rooms or require a single‑room limit.",
+      "severity": "medium",
+      "verified": true,
+      "fix": "Specify that only one room per night may be reimbursed unless a separate business justification is provided.",
+      "estimated_loss_azn": 300,
+      "verdict": "valid",
+      "reason": "The rule permits 150 AZN per night but does not restrict the number of rooms that can be claimed for the same night.",
+      "duplicates": 0,
+      "attackers": [
+        "lazy"
+      ]
+    },
+    {
+      "rule_id": "R1",
+      "attacker": "technicalist",
+      "policy_basis": "A single expense of up to 300 AZN may be approved by the employee's line supervisor.",
+      "scenario": "The policy never states that the approver must be different from the claimant, so an employee who is also their own line supervisor can approve a 300 AZN expense for themselves.",
+      "severity": "medium",
+      "verified": true,
+      "fix": "Specify that the line supervisor approving an expense must be a different employee than the claimant.",
+      "estimated_loss_azn": 300,
+      "verdict": "valid",
+      "reason": "The policy does not state that the line supervisor must be a different person, allowing self‑approval.",
+      "duplicates": 0,
+      "attackers": [
+        "technicalist"
+      ]
+    },
+    {
+      "rule_id": "R5",
+      "attacker": "fraudster",
+      "policy_basis": "An original receipt or invoice must be attached to every expense claim above 50 AZN.",
+      "scenario": "The employee divides a 200 AZN hotel bill into four separate entries of 50 AZN each; no receipt is required for any entry, so the full amount is reimbursed without supporting documents.",
+      "severity": "medium",
+      "verified": true,
+      "fix": "Add: \"The total amount of related expenses for a single vendor or stay must be aggregated for receipt‑attachment purposes.\"",
+      "estimated_loss_azn": 200,
+      "verdict": "valid",
+      "reason": "Dividing a 200 AZN hotel bill into four 50 AZN entries avoids the receipt requirement, even though the total expense exceeds the threshold.",
+      "duplicates": 0,
+      "attackers": [
+        "fraudster"
+      ]
+    },
+    {
+      "rule_id": "R18",
+      "attacker": "fraudster",
+      "policy_basis": "The employee must record the names of the clients entertained.",
+      "scenario": "The employee records the same client name repeatedly for multiple entertainment events, because the rule does not limit how many times a single client may appear.",
+      "severity": "medium",
+      "verified": true,
+      "fix": "Add a limit on the number of entertainment reimbursements per client within a given period.",
+      "estimated_loss_azn": 200,
+      "verdict": "valid",
+      "reason": "The policy does not limit how many times the same client can appear, allowing repeated reimbursements for a single client.",
+      "duplicates": 0,
+      "attackers": [
+        "fraudster"
+      ]
+    },
+    {
+      "rule_id": "R5",
+      "attacker": "technicalist",
+      "policy_basis": "An original receipt or invoice must be attached to every expense claim above 50 AZN.",
+      "scenario": "The employee splits a 200 AZN purchase into four separate expenses of 49 AZN each; none exceeds 50 AZN, so no receipt is required, yet the total reimbursed amount equals the original expense.",
+      "severity": "medium",
+      "verified": true,
+      "fix": "Require an original receipt for any expense where the combined total of related claims exceeds 50 AZN.",
+      "estimated_loss_azn": 200,
+      "verdict": "valid",
+      "reason": "Splitting a single purchase into multiple sub‑claims avoids the receipt requirement.",
+      "duplicates": 0,
+      "attackers": [
+        "technicalist"
+      ]
+    },
+    {
+      "rule_id": "R19",
+      "attacker": "technicalist",
+      "policy_basis": "Finance Department ... may update it at any time.",
+      "scenario": "The employee submits a claim under the current 150 AZN hotel limit, and after approval the Finance Department lowers the limit to 100 AZN; the claim remains payable because the policy does not state that updates apply retroactively.",
+      "severity": "medium",
+      "verified": true,
+      "fix": "All policy updates shall apply to pending and future expense claims; any claim approved under a previous limit must be adjusted to the current limit before payment.",
+      "estimated_loss_azn": 150,
+      "verdict": "valid",
+      "reason": "The policy allows the Finance Department to update the rules at any time but does not state that updates apply retroactively, so a claim approved under the old 150 AZN hotel limit can remain payable after the limit is lowered.",
+      "duplicates": 0,
+      "attackers": [
+        "technicalist"
+      ]
+    },
+    {
+      "rule_id": "R5",
+      "attacker": "lazy",
+      "policy_basis": "An original receipt or invoice must be attached to every expense claim above 50 AZN.",
+      "scenario": "The employee splits a 120 AZN purchase into three separate purchases of 40 AZN each, each below the 50 AZN threshold, thereby avoiding the receipt requirement.",
+      "severity": "medium",
+      "verified": true,
+      "fix": "Add a clause: “If multiple expenses are submitted for the same purchase, the original receipt must be attached to the first expense and referenced in subsequent ones.”",
+      "estimated_loss_azn": 120,
+      "verdict": "valid",
+      "reason": "By splitting a purchase into sub‑expenses below 50 AZN, the receipt requirement is avoided.",
+      "duplicates": 0,
+      "attackers": [
+        "lazy"
+      ]
+    },
+    {
+      "rule_id": "R17",
+      "attacker": "fraudster",
+      "policy_basis": "Client entertainment is reimbursed up to 100 AZN per person, with the approval of the department manager.",
+      "scenario": "The department manager, who is also the employee requesting reimbursement, signs off on the entertainment claim, because the policy does not state that the approver must be different from the claimant.",
+      "severity": "medium",
+      "verified": true,
+      "fix": "Specify that the approving department manager must be a different individual than the employee submitting the claim.",
+      "estimated_loss_azn": 100,
+      "verdict": "valid",
+      "reason": "The policy requires department‑manager approval but does not require the approver to be a different person from the claimant.",
+      "duplicates": 0,
+      "attackers": [
+        "fraudster"
+      ]
+    },
+    {
+      "rule_id": "R18",
+      "attacker": "fraudster",
+      "policy_basis": "The employee must record the names of the clients entertained.",
+      "scenario": "The employee lists fictitious client names for each entertainment entry, satisfying the recording requirement while creating reimbursements for non‑existent clients.",
+      "severity": "medium",
+      "verified": true,
+      "fix": "Require that client names be verifiable (e.g., by providing a client contract or contact confirmation).",
+      "estimated_loss_azn": 100,
+      "verdict": "valid",
+      "reason": "The rule only requires that client names be recorded; it does not require verification of their existence.",
+      "duplicates": 0,
+      "attackers": [
+        "fraudster"
+      ]
+    },
+    {
+      "rule_id": "R17",
+      "attacker": "lazy",
+      "policy_basis": "Client entertainment is reimbursed up to 100 AZN per person, with the approval of the department manager.",
+      "scenario": "The employee submits an entertainment claim for a client, signs the manager’s approval line themselves, and receives reimbursement, because the policy does not state that the approver must be someone other than the claimant.",
+      "severity": "medium",
+      "verified": true,
+      "fix": "Require that the department manager approving a client‑entertainment claim be a different individual than the claimant.",
+      "estimated_loss_azn": 100,
+      "verdict": "valid",
+      "reason": "The policy does not require the approving department manager to be a different person, allowing self‑approval.",
+      "duplicates": 0,
+      "attackers": [
+        "lazy"
+      ]
+    },
+    {
+      "rule_id": "R17",
+      "attacker": "lazy",
+      "policy_basis": "Client entertainment is reimbursed up to 100 AZN per person, with the approval of the department manager.",
+      "scenario": "The employee records a fictitious client name and claims 100 AZN for that “person,” exploiting the lack of any verification requirement for the client‑name list.",
+      "severity": "medium",
+      "verified": true,
+      "fix": "Mandate that client names be verified against an approved client list or require supporting documentation of the entertainment.",
+      "estimated_loss_azn": 100,
+      "verdict": "valid",
+      "reason": "No verification of client names is required, so fictitious clients can be recorded to obtain the full per‑person reimbursement.",
+      "duplicates": 0,
+      "attackers": [
+        "lazy"
+      ]
+    },
+    {
+      "rule_id": "R18",
+      "attacker": "technicalist",
+      "policy_basis": "The employee must record the names of the clients entertained.",
+      "scenario": "The employee lists the same client name repeatedly for multiple entertainment events, exploiting the absence of a limit on distinct client entries.",
+      "severity": "medium",
+      "verified": true,
+      "fix": "Client entertainment is reimbursed up to 100 AZN per client per calendar month, and each client may be listed only once for reimbursement within that period.",
+      "estimated_loss_azn": 100,
+      "verdict": "valid",
+      "reason": "The policy caps reimbursement at 100 AZN per client but does not limit the number of separate entertainments claimed for the same client, allowing repeated claims that defeat the intended per‑person limit.",
+      "duplicates": 0,
+      "attackers": [
+        "technicalist"
+      ]
+    },
+    {
+      "rule_id": "R4",
+      "attacker": "lazy",
+      "policy_basis": "A per diem of 60 AZN is paid for each day of travel to cover meals and incidental costs. No receipts are required for the per diem.",
+      "scenario": "The employee includes alcoholic drinks in the per‑diem claim, relying on the “no receipts” clause, while the explicit ban on alcohol does not apply to per‑diem amounts.",
+      "severity": "medium",
+      "verified": true,
+      "fix": "Add a clause: “The per‑diem may not be used to reimburse alcoholic beverages.”",
+      "estimated_loss_azn": 60,
+      "verdict": "valid",
+      "reason": "The ban on alcohol does not explicitly apply to per‑diem amounts, which have no receipt requirement.",
+      "duplicates": 0,
+      "attackers": [
+        "lazy"
+      ]
+    },
+    {
+      "rule_id": "R12",
+      "attacker": "lazy",
+      "policy_basis": "A per diem of 60 AZN is paid for each day of travel to cover meals and incidental costs.",
+      "scenario": "The employee labels weekend days before the official travel start and after the travel end as “travel days” and claims the 60 AZN per diem for those days, because the rule does not define when a travel day begins or ends.",
+      "severity": "medium",
+      "verified": true,
+      "fix": "Define a travel day as any day on which the employee is officially on business travel, i.e., between the approved departure and return dates.",
+      "estimated_loss_azn": 60,
+      "verdict": "valid",
+      "reason": "The per‑diem rule lacks a definition of when a travel day starts and ends, enabling claims for non‑travel days.",
+      "duplicates": 0,
+      "attackers": [
+        "lazy"
+      ]
+    },
+    {
+      "rule_id": "R16",
+      "attacker": "fraudster",
+      "policy_basis": "The advance must be settled after the trip by submitting receipts or returning the unspent cash.",
+      "scenario": "After using the cash advance for personal items under 50 AZN (which do not require receipts per Article 3.1), the employee returns the remaining cash and submits only the required receipts, effectively keeping the unrecorded personal spend.",
+      "severity": "medium",
+      "verified": true,
+      "fix": "Require that all expenditures from a cash advance be supported by receipts, regardless of amount, or that the full amount be returned if not documented.",
+      "estimated_loss_azn": 50,
+      "verdict": "valid",
+      "reason": "Receipts are only required for expenses above 50 AZN, so personal purchases under that amount can be kept while the advance is settled with the required receipts.",
+      "duplicates": 0,
+      "attackers": [
+        "fraudster"
+      ]
+    },
+    {
+      "rule_id": "R14",
+      "attacker": "fraudster",
+      "policy_basis": "Air travel must be booked in economy class.",
+      "scenario": "The employee books a business‑class ticket but records the fare as “economy” on the claim; the policy provides no verification mechanism, so the claim is accepted.",
+      "severity": "medium",
+      "verified": true,
+      "fix": "Air travel tickets must be accompanied by a class‑verification document; reimbursement will be limited to the economy‑class fare.",
+      "estimated_loss_azn": 0,
+      "verdict": "valid",
+      "reason": "The economy‑class requirement lacks any verification or penalty, allowing a higher‑class ticket to be claimed as economy.",
+      "duplicates": 0,
+      "attackers": [
+        "fraudster"
+      ]
+    },
+    {
+      "rule_id": "R6",
+      "attacker": "lazy",
+      "policy_basis": "Expense claims must be submitted within 30 days.",
+      "scenario": "The employee submits the claim after 30 days but labels the claim as a “cash advance settlement,” exploiting the fact that the policy ties the deadline only to expense claims, not to advance reconciliations.",
+      "severity": "medium",
+      "verified": true,
+      "fix": "Require that cash‑advance settlements be submitted within the same 30‑day period as expense claims.",
+      "estimated_loss_azn": 0,
+      "verdict": "valid",
+      "reason": "The policy sets a 30‑day limit only for expense claims and does not bind cash‑advance settlements, allowing late settlement to bypass the deadline.",
+      "duplicates": 0,
+      "attackers": [
+        "lazy"
+      ]
+    },
+    {
+      "rule_id": "R7",
+      "attacker": "lazy",
+      "policy_basis": "Late claims may be accepted with the consent of the department manager.",
+      "scenario": "The employee, who is also the department manager, gives consent to his own late claim, because the policy does not require the consentor to be a different person.",
+      "severity": "medium",
+      "verified": true,
+      "fix": "Specify that consent for late claims must be provided by a manager other than the employee submitting the claim.",
+      "estimated_loss_azn": 0,
+      "verdict": "valid",
+      "reason": "Consent for late claims may be given by the department manager, and the rule does not require the consentor to be a different person.",
+      "duplicates": 0,
+      "attackers": [
+        "lazy"
+      ]
+    },
+    {
+      "rule_id": "R9",
+      "attacker": "technicalist",
+      "policy_basis": "Domestic business travel is permitted when it is necessary.",
+      "scenario": "The employee argues that attending a personal conference is “necessary” for networking, and because the policy does not require any evidence of necessity, the travel is approved.",
+      "severity": "medium",
+      "verified": true,
+      "fix": "Domestic business travel is permitted only when it is necessary and the necessity must be documented in writing and approved by the department manager.",
+      "estimated_loss_azn": 0,
+      "verdict": "valid",
+      "reason": "The rule allows travel when \"necessary\" but does not require any proof, so an employee can claim any trip is necessary and obtain approval.",
+      "duplicates": 0,
+      "attackers": [
+        "technicalist"
+      ]
+    },
+    {
+      "rule_id": "R9",
+      "attacker": "technicalist",
+      "policy_basis": "Domestic business travel is permitted when it is necessary.",
+      "scenario": "The policy does not tie the necessity determination to any written approval; the employee obtains a casual verbal affirmation from the department manager and proceeds with travel.",
+      "severity": "medium",
+      "verified": true,
+      "fix": "The department manager's decision on travel necessity must be recorded in writing and retained with the expense claim.",
+      "estimated_loss_azn": 0,
+      "verdict": "valid",
+      "reason": "The policy does not specify the form of the manager's decision, allowing a casual verbal affirmation to satisfy the requirement.",
+      "duplicates": 0,
+      "attackers": [
+        "technicalist"
+      ]
+    },
+    {
+      "rule_id": "R10",
+      "attacker": "technicalist",
+      "policy_basis": "The department manager decides whether a trip is necessary.",
+      "scenario": "The policy does not require the decision to be recorded, so the employee obtains an informal “okay” from the department manager via a quick chat message and treats the trip as authorized.",
+      "severity": "medium",
+      "verified": true,
+      "fix": "The decision of the department manager on travel necessity must be documented in a formal written approval stored in the expense system.",
+      "estimated_loss_azn": 0,
+      "verdict": "valid",
+      "reason": "Because the rule does not require the decision to be recorded, an informal chat message suffices as authorization.",
+      "duplicates": 0,
+      "attackers": [
+        "technicalist"
+      ]
+    },
+    {
+      "rule_id": "R14",
+      "attacker": "technicalist",
+      "policy_basis": "Air travel must be booked in economy class.",
+      "scenario": "The employee books a business‑class ticket but reports it as economy, since the policy does not prescribe any verification or definition of “economy class.”",
+      "severity": "medium",
+      "verified": true,
+      "fix": "Require that the ticket class be verified against the airline reservation and define “economy class” as the lowest fare class offered by the carrier.",
+      "estimated_loss_azn": 0,
+      "verdict": "valid",
+      "reason": "No verification of cabin class is required, so a business‑class ticket can be reported as economy.",
+      "duplicates": 0,
+      "attackers": [
+        "technicalist"
+      ]
+    },
+    {
+      "rule_id": "R14",
+      "attacker": "technicalist",
+      "policy_basis": "Air travel must be booked in economy class.",
+      "scenario": "The employee purchases a premium economy ticket and claims reimbursement under the economy‑class rule, exploiting the absence of a mechanism to distinguish cabin classes.",
+      "severity": "medium",
+      "verified": true,
+      "fix": "Specify that only tickets classified as “economy class” per the airline’s fare categories are reimbursable, and list prohibited subclasses such as premium economy.",
+      "estimated_loss_azn": 0,
+      "verdict": "valid",
+      "reason": "The policy does not distinguish premium economy from economy, permitting a higher‑priced ticket to be reimbursed as economy.",
+      "duplicates": 0,
+      "attackers": [
+        "technicalist"
+      ]
+    },
+    {
+      "rule_id": "R8",
+      "attacker": "technicalist",
+      "policy_basis": "The same expense may not be claimed more than once.",
+      "scenario": "The employee divides a single purchase of 120 AZN into two line items of 70 AZN and 50 AZN, each described differently; the policy does not define “same expense,” so both are treated as distinct claims.",
+      "severity": "low",
+      "verified": true,
+      "fix": "Define “same expense” as any single transaction, regardless of how it is itemised.",
+      "estimated_loss_azn": 120,
+      "verdict": "valid",
+      "reason": "The policy does not define “same expense”, allowing a purchase to be split into separate line items.",
+      "duplicates": 0,
+      "attackers": [
+        "technicalist"
+      ]
+    },
+    {
+      "rule_id": "R17",
+      "attacker": "technicalist",
+      "policy_basis": "Client entertainment is reimbursed up to 100 AZN per person, with the approval of the department manager.",
+      "scenario": "The employee is also the department manager and approves their own client‑entertainment expense, because the policy does not forbid the claimant from being the approver.",
+      "severity": "low",
+      "verified": true,
+      "fix": "Require that the approving department manager be a different individual from the employee submitting the client‑entertainment claim.",
+      "estimated_loss_azn": 100,
+      "verdict": "valid",
+      "reason": "The policy does not prohibit the claimant from also being the approving department manager.",
+      "duplicates": 0,
+      "attackers": [
+        "technicalist"
+      ]
+    },
+    {
+      "rule_id": "R17",
+      "attacker": "technicalist",
+      "policy_basis": "Client entertainment is reimbursed up to 100 AZN per person, with the approval of the department manager.",
+      "scenario": "The employee obtains a written approval from a different department manager who has no oversight of the expense, exploiting the rule’s silence on who must give the approval.",
+      "severity": "low",
+      "verified": true,
+      "fix": "State that approval for client‑entertainment expenses must be obtained from the employee’s direct department manager.",
+      "estimated_loss_azn": 100,
+      "verdict": "valid",
+      "reason": "The rule only says “department manager” without specifying that it must be the manager of the employee’s own department.",
+      "duplicates": 0,
+      "attackers": [
+        "technicalist"
+      ]
+    },
+    {
+      "rule_id": "R8",
+      "attacker": "technicalist",
+      "policy_basis": "The same expense may not be claimed more than once.",
+      "scenario": "The employee submits the original receipt for a 80 AZN expense and also submits a summary invoice that lists the same 80 AZN amount under a different category; without a clear definition, both are accepted.",
+      "severity": "low",
+      "verified": true,
+      "fix": "Prohibit reimbursement of the same amount from the same vendor more than once, even if presented under different categories.",
+      "estimated_loss_azn": 80,
+      "verdict": "valid",
+      "reason": "Lack of definition for duplicate reimbursement permits submitting both a receipt and a summary invoice for the same amount.",
+      "duplicates": 0,
+      "attackers": [
+        "technicalist"
+      ]
+    },
+    {
+      "rule_id": "R12",
+      "attacker": "lazy",
+      "policy_basis": "A per diem of 60 AZN is paid for each day of travel to cover meals and incidental costs.",
+      "scenario": "The employee submits separate per‑diem claims for the same calendar day (e.g., morning and evening) each for 60 AZN, exploiting the absence of a rule that limits one per‑diem claim per day.",
+      "severity": "low",
+      "verified": true,
+      "fix": "State that only one per‑diem payment of 60 AZN may be claimed for each travel day.",
+      "estimated_loss_azn": 60,
+      "verdict": "valid",
+      "reason": "The policy does not limit the number of per‑diem claims per calendar day.",
+      "duplicates": 0,
+      "attackers": [
+        "lazy"
+      ]
+    },
+    {
+      "rule_id": "R12",
+      "attacker": "technicalist",
+      "policy_basis": "A per diem of 60 AZN is paid for each day of travel to cover meals and incidental costs.",
+      "scenario": "The employee extends the official travel period by adding non‑travel rest days and claims the 60 AZN per diem for each added day, since the rule sets no maximum number of days.",
+      "severity": "low",
+      "verified": true,
+      "fix": "Per diem may be claimed only for days on which the employee is on official business travel, as evidenced by travel orders.",
+      "estimated_loss_azn": 60,
+      "verdict": "valid",
+      "reason": "The per‑diem rule sets no limit on the number of travel days, permitting claim for extra non‑travel days.",
+      "duplicates": 0,
+      "attackers": [
+        "technicalist"
+      ]
+    },
+    {
+      "rule_id": "R12",
+      "attacker": "technicalist",
+      "policy_basis": "A per diem of 60 AZN is paid for each day of travel to cover meals and incidental costs.",
+      "scenario": "The employee claims a per diem for a day on which all meals are provided by the client, because the policy does not require that meals be unpaid to qualify.",
+      "severity": "low",
+      "verified": true,
+      "fix": "Per diem is payable only for days when the employee incurs meal expenses not covered by the client or host.",
+      "estimated_loss_azn": 60,
+      "verdict": "valid",
+      "reason": "The rule does not require that meals be unpaid, so per‑diem can be claimed even when meals are provided.",
+      "duplicates": 0,
+      "attackers": [
+        "technicalist"
+      ]
+    },
+    {
+      "rule_id": "R13",
+      "attacker": "technicalist",
+      "policy_basis": "No receipts are required for the per diem.",
+      "scenario": "The employee files per‑diem claims for days that were only partially spent on business (e.g., a half‑day conference), because the rule does not define what constitutes a “day of travel.”",
+      "severity": "low",
+      "verified": true,
+      "fix": "Define a “day of travel” as a full business day on which the employee is engaged in work‑related activities for at least 4 hours.",
+      "estimated_loss_azn": 60,
+      "verdict": "valid",
+      "reason": "The rule omits a definition of “day of travel,” allowing claims for partial‑day trips to be treated as full days.",
+      "duplicates": 0,
+      "attackers": [
+        "technicalist"
+      ]
+    },
+    {
+      "rule_id": "R19",
+      "attacker": "technicalist",
+      "policy_basis": "Finance Department ... may update it at any time.",
+      "scenario": "The employee relies on an older version of the policy that allowed a 60 AZN per diem, and files the claim after the Finance Department has revised the per diem to 50 AZN, exploiting the lack of a clause that forces compliance with the latest version.",
+      "severity": "low",
+      "verified": true,
+      "fix": "The most recent version of the policy is binding on all expense claims; any claim submitted after a policy change must use the updated rates.",
+      "estimated_loss_azn": 60,
+      "verdict": "valid",
+      "reason": "The policy does not require compliance with the latest version, allowing a claim based on an older 60 AZN per‑diem rate to be paid after the rate is reduced to 50 AZN.",
+      "duplicates": 0,
+      "attackers": [
+        "technicalist"
+      ]
+    },
+    {
+      "rule_id": "R5",
+      "attacker": "lazy",
+      "policy_basis": "An original receipt or invoice must be attached to every expense claim above 50 AZN.",
+      "scenario": "The employee reports a single 55 AZN expense but claims it is a “cash advance settlement” and therefore submits the advance voucher instead of the original receipt, because the policy does not require a receipt for advances.",
+      "severity": "low",
+      "verified": true,
+      "fix": "Add a clause: “All expense claims, including cash‑advance settlements, must include the original receipt for amounts above 50 AZN.”",
+      "estimated_loss_azn": 55,
+      "verdict": "valid",
+      "reason": "A cash‑advance settlement is treated as exempt from the receipt rule, allowing a 55 AZN expense without a receipt.",
+      "duplicates": 0,
+      "attackers": [
+        "lazy"
+      ]
+    },
+    {
+      "rule_id": "R6",
+      "attacker": "fraudster",
+      "policy_basis": "Expense claims must be submitted within 30 days.",
+      "scenario": "The policy does not define from which date the 30‑day period is measured; the employee submits a claim 35 days after the travel end date but 20 days after the date the receipt was issued, arguing compliance with the unspecified reference point.",
+      "severity": "low",
+      "verified": true,
+      "fix": "Add: \"The 30‑day submission deadline is calculated from the date the expense was incurred or the travel end date, whichever is later.\"",
+      "estimated_loss_azn": 0,
+      "verdict": "valid",
+      "reason": "The policy does not specify whether the 30‑day deadline is measured from the travel end date or receipt date, allowing a claim to be submitted after the travel period but within 30 days of receipt issuance.",
+      "duplicates": 0,
+      "attackers": [
+        "fraudster"
+      ]
+    },
+    {
+      "rule_id": "R6",
+      "attacker": "fraudster",
+      "policy_basis": "Expense claims must be submitted within 30 days.",
+      "scenario": "The employee submits a claim on day 31 but includes a note that the claim was prepared on day 30, exploiting the lack of a required timestamp or verification of the submission date.",
+      "severity": "low",
+      "verified": true,
+      "fix": "Expense claims must include a system‑generated timestamp proving submission within 30 days of the expense date.",
+      "estimated_loss_azn": 0,
+      "verdict": "valid",
+      "reason": "The policy lacks a required timestamp or verification of the submission date, allowing a claim submitted after 30 days to be accepted by claiming it was prepared earlier.",
+      "duplicates": 0,
+      "attackers": [
+        "fraudster"
+      ]
+    },
+    {
+      "rule_id": "R7",
+      "attacker": "fraudster",
+      "policy_basis": "Late claims may be accepted with the consent of the department manager.",
+      "scenario": "The employee files a claim 45 days after the expense and obtains a written consent from the department manager, who is also the employee’s direct manager, satisfying the rule because the policy does not require the consentor to be independent.",
+      "severity": "low",
+      "verified": true,
+      "fix": "Late claims may be accepted only with written consent from a manager who is not the claimant or the claimant’s direct supervisor.",
+      "estimated_loss_azn": 0,
+      "verdict": "valid",
+      "reason": "The rule permits late claims with department‑manager consent but does not require the consentor to be independent, enabling a manager to approve their own late claim.",
+      "duplicates": 0,
+      "attackers": [
+        "fraudster"
+      ]
+    },
+    {
+      "rule_id": "R7",
+      "attacker": "fraudster",
+      "policy_basis": "Late claims may be accepted with the consent of the department manager.",
+      "scenario": "The department manager, who incurred the expense, signs a consent form for their own late claim, as the policy never states that the consent must come from a different person.",
+      "severity": "low",
+      "verified": true,
+      "fix": "Consent for late claims must be provided by a manager other than the employee who incurred the expense.",
+      "estimated_loss_azn": 0,
+      "verdict": "valid",
+      "reason": "The policy does not state that consent for a late claim must come from a different person, allowing a manager to sign consent for their own expense.",
+      "duplicates": 0,
+      "attackers": [
+        "fraudster"
+      ]
+    },
+    {
+      "rule_id": "R8",
+      "attacker": "fraudster",
+      "policy_basis": "The same expense may not be claimed more than once.",
+      "scenario": "The employee files a claim for a conference registration fee and later files a separate claim for “conference materials” that are actually included in the original registration, exploiting the policy’s lack of definition of what constitutes the “same expense.”",
+      "severity": "low",
+      "verified": true,
+      "fix": "Expenses that are included in a single invoice or fee must be claimed together and cannot be split into separate reimbursement items.",
+      "estimated_loss_azn": 0,
+      "verdict": "valid",
+      "reason": "The policy does not define what constitutes the “same expense,” allowing separate claims for registration fee and “materials” that are actually the same cost.",
+      "duplicates": 0,
+      "attackers": [
+        "fraudster"
+      ]
+    },
+    {
+      "rule_id": "R9",
+      "attacker": "fraudster",
+      "policy_basis": "Domestic business travel is permitted when it is necessary.",
+      "scenario": "The employee declares the trip “necessary” for a routine meeting, and because the policy does not define “necessary,” the claim is accepted despite the travel being optional.",
+      "severity": "low",
+      "verified": true,
+      "fix": "Domestic business travel is permitted only when a written justification demonstrates that the travel is essential to business operations.",
+      "estimated_loss_azn": 0,
+      "verdict": "valid",
+      "reason": "“Necessary” is undefined, so an employee can label optional travel as necessary and obtain reimbursement.",
+      "duplicates": 0,
+      "attackers": [
+        "fraudster"
+      ]
+    },
+    {
+      "rule_id": "R9",
+      "attacker": "fraudster",
+      "policy_basis": "Domestic business travel is permitted when it is necessary.",
+      "scenario": "The employee schedules a weekend trip to a client’s office, arguing that the weekend travel is still “necessary,” and the policy provides no restriction on days of the week.",
+      "severity": "low",
+      "verified": true,
+      "fix": "Domestic business travel may be reimbursed only for trips occurring on regular business days unless a specific business need for weekend travel is documented and approved.",
+      "estimated_loss_azn": 0,
+      "verdict": "valid",
+      "reason": "The policy does not restrict travel to weekdays, allowing weekend trips to be claimed as “necessary.”",
+      "duplicates": 0,
+      "attackers": [
+        "fraudster"
+      ]
+    },
+    {
+      "rule_id": "R10",
+      "attacker": "fraudster",
+      "policy_basis": "The department manager decides whether a trip is necessary.",
+      "scenario": "The department manager approves their own travel as “necessary,” because the policy does not require the decision to be made by someone other than the claimant.",
+      "severity": "low",
+      "verified": true,
+      "fix": "The department manager’s decision on travel necessity must be reviewed and approved by a senior manager who is not the claimant.",
+      "estimated_loss_azn": 0,
+      "verdict": "valid",
+      "reason": "The rule allows the department manager to decide necessity but does not forbid the manager from approving their own travel.",
+      "duplicates": 0,
+      "attackers": [
+        "fraudster"
+      ]
+    },
+    {
+      "rule_id": "R10",
+      "attacker": "fraudster",
+      "policy_basis": "The department manager decides whether a trip is necessary.",
+      "scenario": "A colleague with the title of department manager signs off on the employee’s travel request, even though the manager has no direct oversight of that employee, exploiting the absence of a rule linking managerial responsibility to the decision.",
+      "severity": "low",
+      "verified": true,
+      "fix": "Only the direct department manager of the employee may decide whether a trip is necessary.",
+      "estimated_loss_azn": 0,
+      "verdict": "valid",
+      "reason": "The policy does not require the approving department manager to have direct oversight of the employee, permitting unrelated managers to approve travel.",
+      "duplicates": 0,
+      "attackers": [
+        "fraudster"
+      ]
+    },
+    {
+      "rule_id": "R6",
+      "attacker": "lazy",
+      "policy_basis": "Expense claims must be submitted within 30 days.",
+      "scenario": "The employee submits the claim on day 31 but argues that the 30‑day period starts from the date the receipt was received, not the date the expense was incurred, since the policy does not define the start point.",
+      "severity": "low",
+      "verified": true,
+      "fix": "Add a clause: “The 30‑day submission deadline starts on the date the expense was incurred, not the receipt receipt date.”",
+      "estimated_loss_azn": 0,
+      "verdict": "valid",
+      "reason": "The policy does not define when the 30‑day deadline starts, permitting a claim on day 31 if the employee argues the period begins at receipt receipt.",
+      "duplicates": 0,
+      "attackers": [
+        "lazy"
+      ]
+    },
+    {
+      "rule_id": "R7",
+      "attacker": "lazy",
+      "policy_basis": "Late claims may be accepted with the consent of the department manager.",
+      "scenario": "The employee obtains a verbal email from the department manager stating “you may submit late,” exploiting the lack of any formal format or documentation requirement for the consent.",
+      "severity": "low",
+      "verified": true,
+      "fix": "Require written, signed consent on a designated form for any late claim approval.",
+      "estimated_loss_azn": 0,
+      "verdict": "valid",
+      "reason": "The rule allows late claims with department‑manager consent but does not mandate any particular form or documentation of that consent.",
+      "duplicates": 0,
+      "attackers": [
+        "lazy"
+      ]
+    },
+    {
+      "rule_id": "R8",
+      "attacker": "lazy",
+      "policy_basis": "The same expense may not be claimed more than once.",
+      "scenario": "The employee submits a claim for a taxi ride and later submits a claim for “parking” covering the same trip, because the policy does not define what constitutes “the same expense.”",
+      "severity": "low",
+      "verified": true,
+      "fix": "Clarify that any reimbursement for transportation related to the same trip must be consolidated into a single claim.",
+      "estimated_loss_azn": 0,
+      "verdict": "valid",
+      "reason": "Without a definition of “the same expense,” an employee can claim overlapping costs (taxi vs. parking) for the same trip.",
+      "duplicates": 0,
+      "attackers": [
+        "lazy"
+      ]
+    },
+    {
+      "rule_id": "R9",
+      "attacker": "lazy",
+      "policy_basis": "Domestic business travel is permitted when it is necessary.",
+      "scenario": "The employee declares a routine intra‑city meeting as “necessary” without further justification, exploiting the absence of a definition for “necessary.”",
+      "severity": "low",
+      "verified": true,
+      "fix": "Add a definition of “necessary” that requires a documented business purpose and approval criteria.",
+      "estimated_loss_azn": 0,
+      "verdict": "valid",
+      "reason": "The rule permits domestic travel when “necessary,” but provides no definition, allowing arbitrary justification.",
+      "duplicates": 0,
+      "attackers": [
+        "lazy"
+      ]
+    },
+    {
+      "rule_id": "R9",
+      "attacker": "lazy",
+      "policy_basis": "Domestic business travel is permitted when it is necessary.",
+      "scenario": "The employee schedules a short 2‑hour trip and claims it as business travel, because the policy does not set a minimum distance or duration for “travel.”",
+      "severity": "low",
+      "verified": true,
+      "fix": "Introduce a minimum distance or duration threshold for travel to be eligible for reimbursement.",
+      "estimated_loss_azn": 0,
+      "verdict": "valid",
+      "reason": "The policy does not set a minimum distance or duration for travel, so a short 2‑hour trip can be claimed as business travel.",
+      "duplicates": 0,
+      "attackers": [
+        "lazy"
+      ]
+    },
+    {
+      "rule_id": "R10",
+      "attacker": "lazy",
+      "policy_basis": "The department manager decides whether a trip is necessary.",
+      "scenario": "The employee, who also holds the department manager role, declares his own trip necessary, as the policy never requires the decision‑maker to be independent.",
+      "severity": "low",
+      "verified": true,
+      "fix": "Require that the determination of travel necessity be made by a manager other than the requesting employee.",
+      "estimated_loss_azn": 0,
+      "verdict": "valid",
+      "reason": "The decision‑maker for trip necessity may be the employee themselves, as the rule does not require independence.",
+      "duplicates": 0,
+      "attackers": [
+        "lazy"
+      ]
+    },
+    {
+      "rule_id": "R10",
+      "attacker": "lazy",
+      "policy_basis": "The department manager decides whether a trip is necessary.",
+      "scenario": "The employee obtains a quick email from the department manager stating the trip is necessary, without any documented assessment, because the policy does not prescribe a decision‑making process.",
+      "severity": "low",
+      "verified": true,
+      "fix": "Mandate a written justification and sign‑off on a standard form for any travel‑necessity approval.",
+      "estimated_loss_azn": 0,
+      "verdict": "valid",
+      "reason": "The rule allows a manager’s consent for travel necessity but does not prescribe any formal assessment or documentation.",
+      "duplicates": 0,
+      "attackers": [
+        "lazy"
+      ]
+    },
+    {
+      "rule_id": "R18",
+      "attacker": "lazy",
+      "policy_basis": "The employee must record the names of the clients entertained.",
+      "scenario": "The employee lists generic placeholders (e.g., “Client A”) without confirming actual attendance, because the rule only mandates recording names and does not require proof of the entertainment.",
+      "severity": "low",
+      "verified": true,
+      "fix": "Require that recorded client names be accompanied by evidence of the entertainment (e.g., receipts, sign‑in sheet).",
+      "estimated_loss_azn": 0,
+      "verdict": "valid",
+      "reason": "The rule only demands recording names, not proof of actual attendance, permitting placeholder entries.",
+      "duplicates": 0,
+      "attackers": [
+        "lazy"
+      ]
+    },
+    {
+      "rule_id": "R4",
+      "attacker": "technicalist",
+      "policy_basis": "Alcohol is not reimbursable under any circumstances.",
+      "scenario": "The policy never defines “alcohol”; the employee submits a receipt for a non‑alcoholic sparkling beverage that contains a trace amount of alcohol, arguing that it does not fall under the undefined term and therefore is reimbursable.",
+      "severity": "low",
+      "verified": true,
+      "fix": "Define alcohol as any beverage containing any amount of alcohol.",
+      "estimated_loss_azn": 0,
+      "verdict": "valid",
+      "reason": "The policy does not define “alcohol”, allowing a beverage with trace alcohol to be claimed.",
+      "duplicates": 0,
+      "attackers": [
+        "technicalist"
+      ]
+    },
+    {
+      "rule_id": "R5",
+      "attacker": "technicalist",
+      "policy_basis": "An original receipt or invoice must be attached to every expense claim above 50 AZN.",
+      "scenario": "Because the policy does not define what constitutes an “original” receipt, the employee submits a photocopy of a receipt and claims it satisfies the requirement.",
+      "severity": "low",
+      "verified": true,
+      "fix": "Specify that an original receipt must be the vendor‑issued document, not a copy or scan.",
+      "estimated_loss_azn": 0,
+      "verdict": "valid",
+      "reason": "“Original receipt” is undefined, so a photocopy can be used.",
+      "duplicates": 0,
+      "attackers": [
+        "technicalist"
+      ]
+    },
+    {
+      "rule_id": "R6",
+      "attacker": "technicalist",
+      "policy_basis": "Expense claims must be submitted within 30 days.",
+      "scenario": "The policy does not state any consequence for exceeding the 30‑day limit, so the employee submits a claim on day 45 without any manager consent and the claim is still processed.",
+      "severity": "low",
+      "verified": true,
+      "fix": "State that claims submitted after 30 days will be rejected unless written manager consent is provided.",
+      "estimated_loss_azn": 0,
+      "verdict": "valid",
+      "reason": "No penalty is stated for exceeding the 30‑day deadline, so late claims can be processed.",
+      "duplicates": 0,
+      "attackers": [
+        "technicalist"
+      ]
+    },
+    {
+      "rule_id": "R6",
+      "attacker": "technicalist",
+      "policy_basis": "Expense claims must be submitted within 30 days.",
+      "scenario": "The policy never defines from which date the 30‑day period is measured; the employee counts from the date the receipt was received rather than the date the expense was incurred, staying within the limit while the actual expense is older.",
+      "severity": "low",
+      "verified": true,
+      "fix": "Define the 30‑day period as starting from the date the expense was incurred.",
+      "estimated_loss_azn": 0,
+      "verdict": "valid",
+      "reason": "The start point for the 30‑day period is not defined, allowing counting from receipt receipt date.",
+      "duplicates": 0,
+      "attackers": [
+        "technicalist"
+      ]
+    },
+    {
+      "rule_id": "R16",
+      "attacker": "technicalist",
+      "policy_basis": "The advance must be settled after the trip by submitting receipts or returning the unspent cash.",
+      "scenario": "The employee settles the advance months later, citing that the policy only requires settlement “after the trip” and provides no deadline.",
+      "severity": "low",
+      "verified": true,
+      "fix": "Require that all advances be settled within 30 days after the completion of the trip.",
+      "estimated_loss_azn": 0,
+      "verdict": "valid",
+      "reason": "The policy only says settlement must occur “after the trip” and gives no time limit, permitting indefinite delay.",
+      "duplicates": 0,
+      "attackers": [
+        "technicalist"
+      ]
+    }
+  ],
+  "stats": {
+    "candidates": 103,
+    "verdicts": {
+      "valid": 93,
+      "not_a_loophole": 7,
+      "forgery": 3
+    },
+    "valid_before_dedupe": 93,
+    "unique_loopholes": 93,
+    "loss_per_occurrence_azn": 58125
+  }
+}

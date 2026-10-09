@@ -1,0 +1,26 @@
+{
+  "recall": 0.7,
+  "precision": 0.7142857142857143,
+  "found": [
+    "G1",
+    "G4",
+    "G5",
+    "G6",
+    "G7",
+    "G8",
+    "G10"
+  ],
+  "missed": [
+    "G2",
+    "G3",
+    "G9"
+  ],
+  "unmatched_findings": [
+    "For a single trip, the employee submits two separate advance requests of 1,000 AZN each on different days, because the policy limits each request but does not limit the number of requests per trip.",
+    "The employee entertains ten different clients, each with prior manager approval, and claims 100 AZN for each, receiving a total of 1,000 AZN, because the rule limits only the amount per person, not the total amount.",
+    "The employee splits a 200 AZN taxi fare into two separate claims of 100 AZN each, each representing a portion of the same ride, thereby circumventing the single‑claim prohibition.",
+    "The employee records only generic identifiers such as “Client A” and “Client B” without full details; the policy does not define the required level of specificity, allowing vague entries."
+  ],
+  "n_findings": 14,
+  "n_truth": 10
+}

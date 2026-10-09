@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Policy Fuzzer</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600&family=Space+Grotesk:wght@600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0B0E14; --surface:#131824; --raised:#1A2132; --border:#283049;
+  --text:#E8ECF5; --muted:#98A2B8; --accent:#7C8CFF;
+  --high:#FF6B6B; --medium:#FF9F43; --low:#F2D45C;
+  --fraudster:#F2668B; --lazy:#6FB1FF; --technicalist:#B78CFF;
+  --fix:#45D3C6;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:Manrope,system-ui,sans-serif;font-size:15px;line-height:1.5}
+h1,h2,h3{font-family:"Space Grotesk",system-ui,sans-serif;font-weight:600;margin:0}
+.k{font:500 12px "JetBrains Mono",ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+
+header{max-width:1240px;margin:0 auto;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{font:600 20px "Space Grotesk",system-ui,sans-serif;color:var(--accent)}
+.logo span{color:var(--text)}
+.ghost{background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:99px;padding:6px 14px;min-height:36px;font:500 12px "JetBrains Mono",monospace;cursor:pointer}
+.ghost:hover{color:var(--text);border-color:var(--accent)}
+
+main{max-width:1240px;margin:0 auto;padding:0 24px 64px;display:grid;grid-template-columns:360px 1fr;gap:24px;align-items:start}
+@media (max-width:900px){main{grid-template-columns:1fr}.input-panel{position:static!important}}
+
+.input-panel{position:sticky;top:16px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px}
+.input-panel h2{font-size:18px;margin:4px 0 12px}
+textarea{width:100%;height:300px;resize:vertical;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:10px;padding:12px;font:400 14px/1.5 Manrope,system-ui,sans-serif}
+textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
+.chips{display:flex;gap:8px;margin:10px 0 14px;flex-wrap:wrap}
+.chip{background:var(--raised);color:var(--muted);border:1px solid var(--border);border-radius:99px;padding:4px 12px;min-height:30px;font:500 12px "JetBrains Mono",monospace;cursor:pointer}
+.chip:hover{color:var(--text);border-color:var(--accent)}
+.btn{width:100%;min-height:48px;background:var(--accent);color:#0B0E14;border:0;border-radius:10px;font:600 16px "Space Grotesk",system-ui,sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px}
+.btn:hover:not(:disabled){filter:brightness(1.1)}
+.btn:disabled{opacity:.7;cursor:progress}
+.btn.small{width:auto;min-height:40px;padding:0 16px;font-size:14px}
+.spinner{width:16px;height:16px;border:2px solid rgba(11,14,20,.3);border-top-color:#0B0E14;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hint{color:var(--muted);font-size:12px;margin:8px 0 0;text-align:center}
+
+.results{min-width:0}
+.empty{border:2px dashed var(--border);border-radius:14px;padding:64px 24px;text-align:center;color:var(--muted)}
+.empty h2{color:var(--text);margin-bottom:6px}
+.error{background:rgba(255,107,107,.1);border:1px solid var(--high);color:var(--text);border-radius:12px;padding:14px 16px;margin-bottom:16px;display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+
+.stepper{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.step{font:500 12px "JetBrains Mono",monospace;border:1px solid var(--border);color:var(--muted);border-radius:99px;padding:4px 12px}
+.step.active{color:var(--text);border-color:var(--accent);animation:pulse 1.2s ease-in-out infinite}
+.step.done{color:#0B0E14;background:var(--fix);border-color:var(--fix)}
+.step.done::before{content:"\2713 "}
+@keyframes pulse{50%{box-shadow:0 0 0 4px rgba(124,140,255,.25)}}
+.status{color:var(--muted);font-size:14px;min-height:22px;margin-bottom:6px}
+.link{background:none;border:0;color:var(--accent);cursor:pointer;font:inherit;text-decoration:underline;padding:0}
+.lanes{display:flex;gap:14px;flex-wrap:wrap;margin:6px 0 14px;font:500 12px "JetBrains Mono",monospace;color:var(--muted)}
+.lane{display:flex;align-items:center;gap:6px}
+.lane i{width:9px;height:9px;border-radius:50%;background:var(--c);animation:blink 1s ease-in-out infinite}
+.lane:nth-child(2) i{animation-delay:.25s}.lane:nth-child(3) i{animation-delay:.5s}
+@keyframes blink{50%{opacity:.25}}
+
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0 8px}
+@media (max-width:700px){.tiles{grid-template-columns:repeat(2,1fr)}}
+.tile{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
+.tile .v{font:500 28px "JetBrains Mono",monospace;font-variant-numeric:tabular-nums;margin-top:2px}
+.tile.loss{background:var(--raised);border-color:var(--accent)}
+.tile.loss .v{font-size:32px;color:var(--medium)}
+.tile .v.hi{color:var(--high)}
+.caption{color:var(--muted);font-size:13px;min-height:20px;margin-bottom:6px}
+.rulechips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}
+.rc{font:500 12px "JetBrains Mono",monospace;background:var(--raised);border:1px solid var(--border);border-radius:6px;padding:1px 8px;animation:rise .28s ease-out both}
+
+.skeleton{height:150px;border-radius:14px;margin-bottom:12px;background:linear-gradient(90deg,var(--surface) 25%,var(--raised) 50%,var(--surface) 75%);background-size:200% 100%;animation:shimmer 1.2s linear infinite}
+@keyframes shimmer{to{background-position:-200% 0}}
+
+.group-title{display:flex;align-items:center;gap:10px;margin:22px 0 10px}
+.group-title .dot{width:10px;height:10px;border-radius:50%}
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media (max-width:1100px){.cards{grid-template-columns:1fr}}
+
+.card{--c:var(--accent);position:relative;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;overflow:hidden;animation:rise .28s ease-out both}
+.card::before{content:"";position:absolute;inset:0 0 auto 0;height:3px;background:var(--c)}
+.card.sev-high{animation:rise .28s ease-out both,glow .6s ease-out .28s 1}
+@keyframes rise{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes glow{0%,100%{box-shadow:0 0 0 rgba(255,107,107,0)}40%{box-shadow:0 0 24px rgba(255,107,107,.45)}}
+.card-top{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.rid{font:500 12px "JetBrains Mono",monospace;background:var(--raised);border:1px solid var(--border);border-radius:6px;padding:1px 8px}
+.pill{font:500 11px "JetBrains Mono",monospace;text-transform:uppercase;letter-spacing:.06em;color:#0B0E14;border-radius:99px;padding:2px 10px}
+.persona{margin-left:auto;display:flex;align-items:center;gap:8px;text-align:right}
+.persona .nm{font-weight:600;font-size:13px;line-height:1.1}
+.persona .tg{color:var(--muted);font-size:11px}
+.avatar{width:34px;height:34px;border-radius:50%;border:2px solid var(--c);display:grid;place-items:center;color:var(--c);background:var(--raised)}
+.avatar svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.rule{color:var(--muted);font-size:13px;margin:0 0 10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.scenario{margin:0 0 12px}
+.fix{background:rgba(69,211,198,.08);border:1px solid rgba(69,211,198,.35);border-radius:10px;padding:10px 12px;font-size:14px}
+.fix .k{color:var(--fix);display:block;margin-bottom:2px}
+.reason{color:var(--muted);font-size:12px;margin:10px 0 0}
+.card-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:12px;color:var(--muted);font-size:12px}
+.loss-amt{font:500 15px "JetBrains Mono",monospace;color:var(--text);white-space:nowrap}
+.ok{color:var(--fix);font-weight:600}
+
+@media (prefers-reduced-motion:reduce){
+  .card,.card.sev-high,.rc{animation:none}
+  .step.active,.lane i{animation:none}
+  .spinner,.skeleton{animation-duration:2.4s}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">Policy<span> Fuzzer</span></div>
+  <button class="ghost" type="button" data-demo title="Replay the last saved run (no LLM call)">Load cached demo</button>
+</header>
+
+<main>
+  <section class="input-panel">
+    <div class="k">1 · Policy</div>
+    <h2>Paste a policy. We will try to break it.</h2>
+    <textarea id="policy" placeholder="Paste your expense, procurement or travel policy here..." spellcheck="false"></textarea>
+    <div class="chips">
+      <button class="chip" type="button" id="sampleExpense">Sample: expense policy</button>
+    </div>
+    <button class="btn" id="breakBtn" type="button"><span>Break it</span></button>
+    <p class="hint">Ctrl/Cmd + Enter to run</p>
+  </section>
+
+  <section class="results" aria-live="polite">
+    <div id="banner"></div>
+    <div class="empty" id="empty">
+      <h2>No results yet</h2>
+      <p>Three adversarial agents will hunt for loopholes and a judge will verify each one.</p>
+    </div>
+    <div id="wrap" hidden>
+      <div class="stepper">
+        <span class="step">Extract rules</span><span class="step">Attack x3</span><span class="step">Judge</span><span class="step">Done</span>
+      </div>
+      <div class="status"><span id="status"></span> <span id="hint"></span></div>
+      <div class="lanes" id="lanes" hidden>
+        <span class="lane" style="--c:var(--fraudster)"><i></i>Fraudster</span>
+        <span class="lane" style="--c:var(--lazy)"><i></i>Lazy</span>
+        <span class="lane" style="--c:var(--technicalist)"><i></i>Technicalist</span>
+      </div>
+      <div class="rulechips" id="ruleChips"></div>
+      <div class="tiles">
+        <div class="tile"><div class="k">Rules</div><div class="v" id="tRules">0</div></div>
+        <div class="tile"><div class="k">Loopholes</div><div class="v" id="tLoop">0</div></div>
+        <div class="tile"><div class="k">High severity</div><div class="v hi" id="tHigh">0</div></div>
+        <div class="tile loss"><div class="k">Loss / incident (AZN)</div><div class="v" id="tLoss">0</div></div>
+      </div>
+      <div class="caption" id="caption"></div>
+      <div id="sk"><div class="skeleton"></div><div class="skeleton"></div></div>
+      <div id="groups">
+        <section class="grp" id="g-high" hidden><div class="group-title"><span class="dot" style="background:var(--high)"></span><h3>High</h3><span class="k cnt">0</span></div><div class="cards"></div></section>
+        <section class="grp" id="g-medium" hidden><div class="group-title"><span class="dot" style="background:var(--medium)"></span><h3>Medium</h3><span class="k cnt">0</span></div><div class="cards"></div></section>
+        <section class="grp" id="g-low" hidden><div class="group-title"><span class="dot" style="background:var(--low)"></span><h3>Low</h3><span class="k cnt">0</span></div><div class="cards"></div></section>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+const API = "http://localhost:8000";
+const SEVS = ["high", "medium", "low"];
+const RELEASE_MS = 150;     // one card every 150 ms, for live and cached runs alike
+const HINT_AFTER_MS = 20000; // offer the cached demo if the live run goes quiet
+
+const PERSONAS = {
+  fraudster: { name: "Fraudster", tag: "cheats on purpose", color: "var(--fraudster)",
+    icon: '<svg viewBox="0 0 24 24"><path d="M3 8c3-2 15-2 18 0v3c0 4-4 7-9 7s-9-3-9-7z"/><circle cx="8.5" cy="11" r="1.3"/><circle cx="15.5" cy="11" r="1.3"/></svg>' },
+  lazy: { name: "Lazy", tag: "takes shortcuts", color: "var(--lazy)",
+    icon: '<svg viewBox="0 0 24 24"><path d="M5 11V8a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v3"/><rect x="3" y="11" width="18" height="6" rx="2"/><path d="M6 17v2M18 17v2"/></svg>' },
+  technicalist: { name: "Technicalist", tag: "reads the fine print", color: "var(--technicalist)",
+    icon: '<svg viewBox="0 0 24 24"><circle cx="10" cy="10" r="6"/><path d="M15 15l5 5"/></svg>' }
+};
+
+const SAMPLE_POLICY = `Article 1. Expenses above 500 AZN require written approval from the department manager.
+Article 2. Receipts must be submitted within 10 days. Late receipts may be rejected.
+Article 3. Managers may approve travel expenses when necessary.
+Article 4. Per diem is 60 AZN per day for domestic travel.`;
+
+// Last resort if the backend is unreachable during the demo.
+const OFFLINE_SAMPLE = {
+  rules: [
+    { id: "R1", text: "Expenses up to 700 AZN per receipt are reimbursed without manager approval.", type: "limit" },
+    { id: "R2", text: "Expense reports must be submitted within 30 days of purchase, otherwise they are rejected unless a reasonable justification is provided.", type: "deadline" }
+  ],
+  findings: [
+    { rule_id: "R1", attacker: "fraudster", severity: "high", verified: true, estimated_loss_azn: 45000,
+      scenario: "Split a single 1,800 AZN client dinner into three 600 AZN receipts on consecutive days. Each one stays under the 700 AZN limit, so none needs manager approval.",
+      fix: "Aggregate expenses per employee and vendor per week, and apply the approval threshold to the total." },
+    { rule_id: "R2", attacker: "technicalist", severity: "medium", verified: true, estimated_loss_azn: 18000,
+      scenario: "Submit a report five months late with the justification 'I was very busy'. The policy never defines 'reasonable justification', so the claim cannot be rejected as written.",
+      fix: "Define accepted justifications (illness, official travel, system outage) and require manager sign-off for late reports." },
+    { rule_id: "R1", attacker: "lazy", severity: "low", verified: true, estimated_loss_azn: 6500,
+      scenario: "An employee files several personal taxi rides as one 'business trip' entry under the limit and attaches no receipts, because the rule never requires receipts for amounts below 700 AZN.",
+      fix: "Require a receipt or ride-hailing statement for every claim, regardless of amount." }
+  ],
+  stats: { candidates: 6, valid_before_dedupe: 3, unique_loopholes: 3 }
+};
+
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const fmt = (n) => Number(n || 0).toLocaleString("en-US");
+const reduceMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+let S = { queue: [] };   // state of the current run
+let CTRL = null;         // AbortController of the live stream
+let REPLAY = 0;          // token that cancels a running cached replay
+
+function setNum(el, to, instant) {
+  const from = el._v || 0;
+  el._v = to;
+  cancelAnimationFrame(el._r);
+  if (instant || reduceMotion() || from === to) { el.textContent = fmt(to); return; }
+  const t0 = performance.now(), D = 500;
+  const step = (t) => {
+    const p = Math.min(1, (t - t0) / D);
+    el.textContent = fmt(Math.round(from + (to - from) * (1 - Math.pow(1 - p, 3))));
+    if (p < 1) el._r = requestAnimationFrame(step);
+  };
+  el._r = requestAnimationFrame(step);
+}
+
+function setLoading(on) {
+  const btn = $("breakBtn");
+  btn.disabled = on;
+  btn.innerHTML = on ? '<span class="spinner"></span><span>Breaking it...</span>' : "<span>Break it</span>";
+}
+
+function setStep(n) {
+  document.querySelectorAll(".step").forEach((el, i) => {
+    el.classList.toggle("done", i < n);
+    el.classList.toggle("active", i === n && n < 4);
+  });
+  $("lanes").hidden = n !== 1;
+}
+
+const status = (t) => { $("status").textContent = t; };
+const showSkeleton = (on) => { $("sk").hidden = !on; };
+
+function banner(msg, withDemo) {
+  $("banner").innerHTML = '<div class="error"><div><strong>Something went wrong.</strong><br>' + esc(msg) + "</div>" +
+    (withDemo ? '<button class="btn small" type="button" data-demo>Load cached demo</button>' : "") + "</div>";
+}
+
+function normalize(f) {
+  const g = Object.assign({}, f);
+  g.severity = SEVS.includes(String(g.severity).toLowerCase()) ? String(g.severity).toLowerCase() : "medium";
+  if (!PERSONAS[g.attacker]) g.attacker = "technicalist";
+  g.estimated_loss_azn = Math.max(0, Math.round(Number(g.estimated_loss_azn) || 0));
+  return g;
+}
+
+function cardHTML(f, ruleText) {
+  const p = PERSONAS[f.attacker];
+  const names = (f.attackers && f.attackers.length ? f.attackers : [f.attacker]).map((a) => (PERSONAS[a] ? PERSONAS[a].name : a));
+  const dup = f.duplicates ? " · " + f.duplicates + " similar merged" : "";
+  return `
+  <article class="card sev-${f.severity}" style="--c:${p.color}">
+    <div class="card-top">
+      <span class="rid">${esc(f.rule_id)}</span>
+      <span class="pill" style="background:var(--${f.severity})">${f.severity}</span>
+      <div class="persona">
+        <div><div class="nm">${esc(p.name)}</div><div class="tg">${esc(p.tag)}</div></div>
+        <div class="avatar" title="${esc(p.name)}">${p.icon}</div>
+      </div>
+    </div>
+    ${ruleText ? `<p class="rule">${esc(ruleText)}</p>` : ""}
+    <p class="scenario">${esc(f.scenario)}</p>
+    <div class="fix"><span class="k">Suggested fix</span>${esc(f.fix)}</div>
+    ${f.reason ? `<p class="reason">Judge: ${esc(f.reason)}</p>` : ""}
+    <div class="card-foot">
+      <span><span class="ok">&#10003; Judge verified</span> · Found by ${esc(names.join(", "))}${esc(dup)}</span>
+      <span class="loss-amt">${fmt(f.estimated_loss_azn)} AZN</span>
+    </div>
+  </article>`;
+}
+
+function addCard(f) {
+  showSkeleton(false);
+  const g = $("g-" + f.severity);
+  g.hidden = false;
+  const rule = S.rules.find((r) => r.id === f.rule_id);
+  g.querySelector(".cards").insertAdjacentHTML("beforeend", cardHTML(f, rule ? rule.text : ""));
+  g.querySelector(".cnt").textContent = g.querySelectorAll(".card").length;
+  S.cards++;
+  if (f.severity === "high") S.high++;
+  S.loss += f.estimated_loss_azn;
+  setNum($("tLoop"), S.cards);
+  setNum($("tHigh"), S.high);
+  setNum($("tLoss"), S.loss);
+}
+
+function tick() {
+  if (S.queue.length) addCard(S.queue.shift());
+  else if (S.gotDone) finalize();
+}
+
+function stopTimers() {
+  clearInterval(S.timer);
+  clearInterval(S.hintTimer);
+}
+
+function finalize() {
+  stopTimers();
+  S.running = false;
+  showSkeleton(false);
+  setStep(4);
+  setLoading(false);
+  $("hint").innerHTML = "";
+  status(S.cards + " verified loopholes" + (S.label ? " (" + S.label + ")" : "") + ".");
+}
+
+function fail(msg) {
+  stopTimers();
+  S.running = false;
+  showSkeleton(false);
+  setLoading(false);
+  $("hint").innerHTML = "";
+  banner(msg, true);
+}
+
+function caption() {
+  const st = S.stats || {};
+  const cand = st.candidates != null ? st.candidates : S.cand;
+  const verified = st.valid_before_dedupe != null ? st.valid_before_dedupe : S.cards;
+  if (cand == null) return;
+  const merged = verified - S.totalFindings;
+  $("caption").textContent = cand + " candidate exploits \u2192 " + verified + " verified by the judge" +
+    (merged > 0 ? " \u2192 " + S.totalFindings + " unique after merging " + merged + " duplicates" : "");
+}
+
+function handleEvent(ev) {
+  S.lastEvent = Date.now();
+  $("hint").innerHTML = "";
+  switch (ev.stage) {
+    case "rules": {
+      S.rules = ev.rules || [];
+      setStep(1);
+      status(S.rules.length + " rules extracted. Three agents are attacking them...");
+      $("ruleChips").innerHTML = S.rules.map((r, i) =>
+        `<span class="rc" style="animation-delay:${i * 40}ms" title="${esc(r.text)}">${esc(r.id)}</span>`).join("");
+      setNum($("tRules"), S.rules.length);
+      break;
+    }
+    case "candidates":
+      S.cand = ev.count;
+      setStep(2);
+      status(ev.count + " candidate exploits. The judge is checking each one...");
+      break;
+    case "judged":
+      setStep(2);
+      status("Judge finished. Merging duplicates...");
+      break;
+    case "finding":
+      S.queue.push(normalize(ev.finding));
+      S.totalFindings++;
+      break;
+    case "done":
+      S.stats = (ev.result && ev.result.stats) || null;
+      S.gotDone = true;
+      caption();
+      break;
+    case "error":
+      fail(ev.detail || "Pipeline error");
+      break;
+  }
+}
+
+function abortRun() {
+  if (CTRL) { CTRL.abort(); CTRL = null; }
+  REPLAY++;
+  stopTimers();
+}
+
+function startRun() {
+  abortRun();
+  S = { queue: [], rules: [], cards: 0, high: 0, loss: 0, totalFindings: 0, gotDone: false,
+        stats: null, cand: null, running: true, lastEvent: Date.now(), label: "" };
+  $("banner").innerHTML = "";
+  $("empty").hidden = true;
+  $("wrap").hidden = false;
+  $("ruleChips").innerHTML = "";
+  $("caption").textContent = "";
+  $("hint").innerHTML = "";
+  document.querySelectorAll(".grp").forEach((g) => {
+    g.hidden = true; g.querySelector(".cards").innerHTML = ""; g.querySelector(".cnt").textContent = "0";
+  });
+  ["tRules", "tLoop", "tHigh", "tLoss"].forEach((id) => setNum($(id), 0, true));
+  showSkeleton(true);
+  setStep(0);
+  S.timer = setInterval(tick, RELEASE_MS);
+}
+
+async function streamAnalyze(text, signal) {
+  const res = await fetch(API + "/analyze/stream", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ text }),
+    signal
+  });
+  if (!res.ok) {
+    let detail = "Server returned " + res.status + ".";
+    try { const j = await res.json(); if (j.detail) detail = typeof j.detail === "string" ? j.detail : JSON.stringify(j.detail); } catch (_) {}
+    throw new Error(detail);
+  }
+  const reader = res.body.getReader();
+  const dec = new TextDecoder();
+  let buf = "";
+  for (;;) {
+    const { value, done } = await reader.read();
+    if (done) break;
+    buf += dec.decode(value, { stream: true });
+    let i;
+    while ((i = buf.indexOf("\n\n")) !== -1) {
+      const block = buf.slice(0, i);
+      buf = buf.slice(i + 2);
+      const line = block.split("\n").find((l) => l.startsWith("data:"));
+      if (!line) continue;
+      let ev;
+      try { ev = JSON.parse(line.slice(5).trim()); } catch (_) { continue; }
+      handleEvent(ev);
+    }
+  }
+}
+
+async function analyze() {
+  const text = $("policy").value.trim();
+  if (!text) { banner("Paste a policy first.", false); return; }
+
+  startRun();
+  setLoading(true);
+  status("Extracting rules from the policy...");
+  S.hintTimer = setInterval(() => {
+    if (S.running && Date.now() - S.lastEvent > HINT_AFTER_MS) {
+      $("hint").innerHTML = '&middot; still working. <button class="link" type="button" data-demo>Load cached demo instead</button>';
+    }
+  }, 2000);
+
+  CTRL = new AbortController();
+  const ctl = CTRL;
+  try {
+    await streamAnalyze(text, ctl.signal);
+    if (S.running && !S.gotDone) fail("The stream ended before the result was complete.");
+  } catch (err) {
+    if (err.name === "AbortError") return;
+    fail(err instanceof TypeError ? "Cannot reach the backend at " + API + ". Is uvicorn running?" : err.message);
+  }
+}
+
+async function loadDemo() {
+  startRun();
+  const tok = REPLAY;
+  const live = () => tok === REPLAY && S.running;
+  const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+  status("Loading cached demo...");
+
+  let data, label = "cached run";
+  try {
+    const r = await fetch(API + "/demo");
+    if (!r.ok) throw new Error("no demo");
+    data = await r.json();
+    if (data.source === "mock") label = "sample data";
+  } catch (_) {
+    data = OFFLINE_SAMPLE;
+    label = "offline sample";
+  }
+  S.label = label;
+
+  const st = data.stats || {};
+  await wait(500); if (!live()) return;
+  handleEvent({ stage: "rules", rules: data.rules || [] });
+  await wait(900); if (!live()) return;
+  handleEvent({ stage: "candidates", count: st.candidates != null ? st.candidates : (data.findings || []).length });
+  await wait(900); if (!live()) return;
+  handleEvent({ stage: "judged", counts: st.verdicts || {} });
+  await wait(700); if (!live()) return;
+  (data.findings || []).forEach((f) => handleEvent({ stage: "finding", finding: f }));
+  handleEvent({ stage: "done", result: data });
+}
+
+document.addEventListener("click", (e) => {
+  if (e.target.closest("[data-demo]")) loadDemo();
+});
+$("breakBtn").addEventListener("click", analyze);
+$("sampleExpense").addEventListener("click", () => { $("policy").value = SAMPLE_POLICY; $("policy").focus(); });
+$("policy").addEventListener("keydown", (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key === "Enter") analyze();
+});
+document.addEventListener("keydown", (e) => {
+  if (e.shiftKey && e.key === "D" && !/^(TEXTAREA|INPUT)$/.test(document.activeElement.tagName)) loadDemo();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+{
+  "recall": 1.0,
+  "precision": 0.6153846153846154,
+  "found": [
+    "G1",
+    "G2",
+    "G3",
+    "G4",
+    "G5",
+    "G6",
+    "G7",
+    "G8",
+    "G9",
+    "G10"
+  ],
+  "missed": [],
+  "unmatched_findings": [
+    "The employee claims hotel reimbursement for nights when they stayed with a colleague who offered a free room, because the rule does not require the accommodation to be actually paid for.",
+    "The employee submits three separate advance requests for 1,000 AZN each for three consecutive trips, because the rule limits only the amount per request, not the total amount an employee may receive.",
+    "The employee requests a 1,000 AZN advance for a short trip, then later requests an additional advance for the same trip, exploiting the absence of a rule that forbids multiple advances for one trip.",
+    "The employee reports a travel period of fifteen days, even though the trip only lasted three days, and receives 60 AZN for every reported day because the rule does not restrict how many days may be claimed.",
+    "The employee purchases a first‑class ticket and claims reimbursement for the same amount, arguing that the policy only states a requirement, not a penalty for non‑compliance.",
+    "The employee requests a 1,000 AZN advance even though no business trip has been approved yet, because the rule does not require prior travel authorization before the advance request.",
+    "The employee returns only a portion of the unspent cash and keeps the remainder, arguing that the rule allows settlement by “returning the unspent cash” without specifying that the full amount must be returned.",
+    "The employee books two separate rooms for the same night, each costing 150 AZN, and submits two separate claims, since the rule does not restrict the number of rooms or require a single‑room limit.",
+    "The employee records the same client name repeatedly for multiple entertainment events, because the rule does not limit how many times a single client may appear.",
+    "The employee submits a claim under the current 150 AZN hotel limit, and after approval the Finance Department lowers the limit to 100 AZN; the claim remains payable because the policy does not state that updates apply retroactively.",
+    "The employee records a fictitious client name and claims 100 AZN for that “person,” exploiting the lack of any verification requirement for the client‑name list.",
+    "The employee lists fictitious client names for each entertainment entry, satisfying the recording requirement while creating reimbursements for non‑existent clients.",
+    "The employee includes alcoholic drinks in the per‑diem claim, relying on the “no receipts” clause, while the explicit ban on alcohol does not apply to per‑diem amounts.",
+    "The employee books a business‑class ticket but records the fare as “economy” on the claim; the policy provides no verification mechanism, so the claim is accepted.",
+    "The employee obtains a written approval from a different department manager who has no oversight of the expense, exploiting the rule’s silence on who must give the approval.",
+    "The employee submits separate per‑diem claims for the same calendar day (e.g., morning and evening) each for 60 AZN, exploiting the absence of a rule that limits one per‑diem claim per day.",
+    "The employee reports a single 55 AZN expense but claims it is a “cash advance settlement” and therefore submits the advance voucher instead of the original receipt, because the policy does not require a receipt for advances.",
+    "Because the policy does not define what constitutes an “original” receipt, the employee submits a photocopy of a receipt and claims it satisfies the requirement.",
+    "The employee submits a claim on day 31 but includes a note that the claim was prepared on day 30, exploiting the lack of a required timestamp or verification of the submission date.",
+    "The employee lists generic placeholders (e.g., “Client A”) without confirming actual attendance, because the rule only mandates recording names and does not require proof of the entertainment."
+  ],
+  "n_findings": 52,
+  "n_truth": 10
+}

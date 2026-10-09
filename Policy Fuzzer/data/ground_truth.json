@@ -1,0 +1,22 @@
+[
+  {"id": "G1", "article": "2.1-2.3", "title": "Splitting a purchase below approval thresholds",
+   "description": "The thresholds apply to a 'single expense' and nothing says related or same-day expenses are aggregated, so one purchase split into several claims stays under every limit."},
+  {"id": "G2", "article": "2.2-2.3", "title": "Self-approval",
+   "description": "Nothing prevents a department manager or the Finance Director from approving an expense they incurred themselves."},
+  {"id": "G3", "article": "3.1", "title": "No receipt below 50 AZN, with no cap on how many claims",
+   "description": "Claims up to 50 AZN need no receipt and the number of such claims is unlimited, so many small unreceipted claims can add up."},
+  {"id": "G4", "article": "3.2", "title": "Deadline start date undefined",
+   "description": "'Within 30 days' does not say 30 days from what (purchase, trip end, invoice date), so the employee can choose the most favourable start point."},
+  {"id": "G5", "article": "3.2", "title": "Unlimited discretionary waiver of late claims",
+   "description": "A department manager may accept late claims with no criteria, evidence or maximum delay, so any claim can be revived."},
+  {"id": "G6", "article": "4.1", "title": "'Necessary' undefined and decided by the manager alone",
+   "description": "Trips are allowed when 'necessary' and the manager alone decides, with no documented business purpose or second check."},
+  {"id": "G7", "article": "4.2", "title": "Hotel cap per night with no limit on nights",
+   "description": "Lodging is capped per night but not tied to the trip's business dates, so extra nights (for example a weekend extension) are reimbursable up to the cap."},
+  {"id": "G8", "article": "4.3", "title": "'Day of travel' undefined so partial days pay in full",
+   "description": "Departure and return days, or a few hours away, may each count as a full 60 AZN day because a travel day is never defined."},
+  {"id": "G9", "article": "4.3", "title": "Per diem paid even when meals are already covered",
+   "description": "The full per diem is paid with no deduction when meals are provided by the hotel, a client or a host."},
+  {"id": "G10", "article": "5.1", "title": "No deadline to settle a cash advance",
+   "description": "The advance is settled 'after the trip' with no date, and nothing stops a new advance while an earlier one is unsettled."}
+]

@@ -1,0 +1,34 @@
+{
+  "recall": 0.7,
+  "precision": 0.625,
+  "found": [
+    "G1",
+    "G2",
+    "G3",
+    "G5",
+    "G6",
+    "G7",
+    "G10"
+  ],
+  "missed": [
+    "G4",
+    "G8",
+    "G9"
+  ],
+  "unmatched_findings": [
+    "The employee claims hotel reimbursement for nights when they stayed with a colleague who offered a free room, because the rule does not require the accommodation to be actually paid for.",
+    "The employee records entertainment for ten different “clients” (using generic names) in a single claim, each at the 100 AZN limit, exploiting the lack of a total cap on the number of persons.",
+    "The employee reports a travel period of fifteen days, even though the trip only lasted three days, and receives 60 AZN for every reported day because the rule does not restrict how many days may be claimed.",
+    "The employee purchases a first‑class ticket and claims reimbursement for the same amount, arguing that the policy only states a requirement, not a penalty for non‑compliance.",
+    "The employee requests a 1,000 AZN advance even though no business trip has been approved yet, because the rule does not require prior travel authorization before the advance request.",
+    "The employee books two separate rooms for the same night, each costing 150 AZN, and submits two separate claims, since the rule does not restrict the number of rooms or require a single‑room limit.",
+    "The employee records the same client name repeatedly for multiple entertainment events, because the rule does not limit how many times a single client may appear.",
+    "The employee submits a claim under the current 150 AZN hotel limit, and after approval the Finance Department lowers the limit to 100 AZN; the claim remains payable because the policy does not state that updates apply retroactively.",
+    "The employee records a fictitious client name and claims 100 AZN for that “person,” exploiting the lack of any verification requirement for the client‑name list.",
+    "The employee includes alcoholic drinks in the per‑diem claim, relying on the “no receipts” clause, while the explicit ban on alcohol does not apply to per‑diem amounts.",
+    "The employee obtains a written approval from a different department manager who has no oversight of the expense, exploiting the rule’s silence on who must give the approval.",
+    "The employee reports a single 55 AZN expense but claims it is a “cash advance settlement” and therefore submits the advance voucher instead of the original receipt, because the policy does not require a receipt for advances."
+  ],
+  "n_findings": 32,
+  "n_truth": 10
+}
